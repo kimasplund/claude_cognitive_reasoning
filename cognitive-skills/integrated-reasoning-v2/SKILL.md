@@ -1,15 +1,15 @@
 ---
 name: integrated-reasoning-v2
-description: Enhanced meta-orchestration for selecting and combining reasoning patterns. Now includes 7 methodologies (ToT, BoT, SRC, HE, AR, DR, AT) with weighted multi-dimensional selection, feedback loops, and validated confidence aggregation. Use when facing complex problems requiring optimal reasoning strategy selection.
+description: Enhanced meta-orchestration for selecting and combining reasoning patterns. Now includes 9 methodologies (ToT, BoT, SRC, HE, AR, DR, AT, RTR, NDF) with weighted multi-dimensional selection, feedback loops, uncertainty propagation, and validated confidence aggregation. Use when facing complex problems requiring optimal reasoning strategy selection.
 license: MIT
-version: 2.0
+version: 2.1
 ---
 
 # Integrated Reasoning v2 - Meta-Orchestration
 
 **Purpose**: Select and orchestrate optimal reasoning pattern(s) for your problem. V2 addresses limitations of v1: adds new patterns, replaces order-dependent decision tree with weighted scoring, includes feedback loops, and fixes confidence aggregation.
 
-## Available Reasoning Patterns (7)
+## Available Reasoning Patterns (9)
 
 | Pattern | Purpose | Best For |
 |---------|---------|----------|
@@ -18,8 +18,10 @@ version: 2.0
 | **Self-Reflecting Chain (SRC)** | Sequential reasoning with validation | Dependent steps, proofs, linear traces |
 | **Hypothesis-Elimination (HE)** | Systematic elimination through evidence | Diagnosis, debugging, root cause |
 | **Adversarial Reasoning (AR)** | Stress-test through attack simulation | Validation, security, pre-mortems |
-| **Dialectical Reasoning (DR)** | Synthesize opposing valid perspectives | Trade-offs, stakeholder conflicts |
+| **Dialectical Reasoning (DR)** | Synthesize opposing valid perspectives | Trade-offs, conceptual conflicts |
 | **Analogical Transfer (AT)** | Solve via cross-domain parallels | Novel problems, no direct precedent |
+| **Rapid Triage Reasoning (RTR)** | Fast decisions under time pressure | Incidents, emergencies, time-boxed choices |
+| **Negotiated Decision Framework (NDF)** | Multi-stakeholder coordination | Politics, competing interests, buy-in needed |
 
 ---
 
@@ -40,7 +42,21 @@ Score each dimension (1-5):
 | **Opposing Valid Views** | _/5 | Are there legitimate conflicting perspectives? |
 | **Problem Novelty** | _/5 | Is this unprecedented in your domain? |
 | **Robustness Required** | _/5 | Need to stress-test before committing? |
+| **Solution Exists** | _/5 | Do you have a candidate solution to evaluate? |
+| **Time Pressure** | _/5 | How constrained is decision time? (5=minutes) |
+| **Stakeholder Complexity** | _/5 | Multiple parties with competing interests? |
 ```
+
+### Step 1.5: Time Pressure Fast-Path
+
+**CRITICAL**: If Time Pressure = 5 (emergency/incident):
+- Skip full scoring
+- Use **Rapid Triage Reasoning (RTR)** directly
+- RTR is optimized for decisions under extreme time constraints
+
+If Time Pressure ≥ 4:
+- Consider RTR unless problem is clearly sequential (use SRC) or diagnostic (use HE)
+- Apply abbreviated scoring (skip orchestration considerations)
 
 ### Step 2: Calculate Pattern Affinity Scores
 
@@ -53,11 +69,50 @@ SRC  = (Sequential × 0.45) + (Criteria × 0.25) + (SingleAnswer × 0.20) + ((6-
 
 HE   = (Evidence × 0.40) + (SingleAnswer × 0.30) + ((6-Novelty) × 0.20) + ((6-OpposingViews) × 0.10)
 
-AR   = (Robustness × 0.50) + (SingleAnswer × 0.25) + ((6-Novelty) × 0.15) + (Evidence × 0.10)
+AR   = (Robustness × 0.40) + (SolutionExists × 0.30) + ((6-Novelty) × 0.15) + (Evidence × 0.15)
+       # NOTE: AR requires SolutionExists ≥ 3, otherwise score = 0
 
-DR   = (OpposingViews × 0.45) + ((6-SingleAnswer) × 0.25) + (Criteria × 0.15) + ((6-Evidence) × 0.15)
+DR   = (OpposingViews × 0.50) + (Criteria × 0.20) + ((6-Evidence) × 0.15) + (MIN(SingleAnswer, OpposingViews) × 0.15)
+       # NOTE: V2.1 fix - SingleAnswer no longer penalized when OpposingViews is high
 
 AT   = (Novelty × 0.45) + ((6-SpaceKnown) × 0.30) + ((6-Evidence) × 0.15) + ((6-Sequential) × 0.10)
+
+RTR  = (TimePressure × 0.50) + (SingleAnswer × 0.25) + (Evidence × 0.15) + ((6-Novelty) × 0.10)
+       # NOTE: RTR auto-selected when TimePressure = 5
+
+NDF  = (StakeholderComplexity × 0.45) + (OpposingViews × 0.25) + ((6-Criteria) × 0.15) + ((6-TimePressure) × 0.15)
+       # NOTE: NDF requires StakeholderComplexity ≥ 3 to be considered
+```
+
+**Formula Validation Rules** (V2.1):
+- AR returns 0 if SolutionExists < 3 (nothing to attack)
+- RTR auto-triggers when TimePressure = 5 (emergency mode)
+- NDF returns 0 if StakeholderComplexity < 3 (single decision-maker)
+- If multiple patterns score within 0.3 of each other, use uncertainty propagation (Step 2.5)
+
+### Step 2.5: Uncertainty Propagation (V2.1)
+
+When dimension scores are uncertain, propagate uncertainty to pattern selection:
+
+```markdown
+## Uncertainty Assessment
+
+For each dimension where you're unsure (±1 point uncertainty):
+
+1. Calculate pattern scores at LOW end (dimension - 1)
+2. Calculate pattern scores at HIGH end (dimension + 1)
+3. If different pattern wins at each end → **Flag as uncertain selection**
+
+### Handling Uncertain Selections
+
+**If same pattern wins both ends**: Proceed with confidence
+**If different patterns win**:
+  - Run BOTH patterns in parallel (if time permits)
+  - OR use the pattern that's more robust to being wrong
+  - OR gather more information to reduce dimension uncertainty
+
+### Uncertainty Discount
+Apply -5% to final confidence for each uncertain dimension that affects the winning pattern.
 ```
 
 ### Step 3: Interpret Scores
@@ -66,6 +121,7 @@ AT   = (Novelty × 0.45) + ((6-SpaceKnown) × 0.30) + ((6-Evidence) × 0.15) + (
 |----------|--------|
 | One pattern scores >4.0 | Use that pattern directly |
 | Top 2 within 0.5 of each other | Consider multi-pattern orchestration |
+| Top 3 within 0.3 of each other | Apply uncertainty propagation first |
 | All patterns <3.0 | Problem may need decomposition first |
 | Top pattern <2.5 | None fit well; use Direct Analysis |
 
@@ -107,6 +163,24 @@ AT   = (Novelty × 0.45) + ((6-SpaceKnown) × 0.30) + ((6-Evidence) × 0.15) + (
 | AT | ToT | Sequential: AT (find analogies) → ToT (evaluate derived solutions) |
 | AT | BoT | Parallel: Both explore, merge findings |
 | HE | SRC | Sequential: HE (find cause) → SRC (trace mechanism) |
+| RTR | HE | Sequential: RTR (immediate triage) → HE (post-incident RCA) |
+| RTR | AR | Sequential: RTR (quick decision) → AR (post-decision validation) |
+
+| NDF | ToT | Sequential: NDF (get buy-in) → ToT (optimize within agreed bounds) |
+| NDF | DR | Sequential: DR (resolve conceptual tension) → NDF (negotiate stakeholders) |
+| BoT | NDF | Sequential: BoT (explore options) → NDF (negotiate which to pursue) |
+
+**RTR Orchestration Rules**:
+- RTR is typically a STARTING pattern, not an ending one
+- After RTR stabilizes situation, follow up with deeper analysis
+- RTR → HE for incident root cause analysis
+- RTR → ToT for revisiting decision with more time
+
+**NDF Orchestration Rules**:
+- NDF typically FOLLOWS technical analysis (know options before negotiating)
+- BoT → NDF: Explore space, then negotiate which options to pursue
+- NDF → ToT: After stakeholder agreement, optimize implementation
+- DR → NDF: Resolve conceptual tensions first, then stakeholder tensions
 
 ---
 
@@ -222,6 +296,18 @@ If patterns share significant assumptions, apply -5% adjustment.
 - Source domain may mislead
 - Requires creativity in finding parallels
 
+**Rapid Triage Reasoning (RTR)**:
+- Sacrifices depth for speed
+- May miss optimal solution (accepts "good enough")
+- Requires follow-up analysis for important decisions
+- Not suitable when time is actually available
+
+**Negotiated Decision Framework (NDF)**:
+- Requires multiple genuine stakeholders
+- Time-intensive (relationship building takes time)
+- May produce suboptimal technical solutions for political acceptance
+- Doesn't help when one party has absolute authority
+
 ---
 
 ## Quick Selection Guide
@@ -248,6 +334,12 @@ If patterns share significant assumptions, apply -5% adjustment.
 "This problem is novel - no one has solved it in my domain"
   → Analogical Transfer
 
+"I need to decide RIGHT NOW (minutes, not hours)"
+  → Rapid Triage Reasoning
+
+"Multiple stakeholders with competing interests must agree"
+  → Negotiated Decision Framework
+
 "I'm not sure which to use"
   → Score the dimensions (Step 1)
 ```
@@ -269,15 +361,18 @@ If patterns share significant assumptions, apply -5% adjustment.
 | Opposing Valid Views | 5 | Big tension: innovation vs caution |
 | Problem Novelty | 5 | Very new challenge |
 | Robustness Required | 4 | High stakes, need validation |
+| Solution Exists | 1 | No candidate solution yet |
+| Time Pressure | 2 | Strategic decision, not urgent |
 
 ### Pattern Affinity Scores
 - ToT: (3×.35)+(4×.30)+(2×.20)+(1×.15) = 2.80
 - BoT: (4×.35)+(2×.30)+(3×.20)+(5×.15) = 3.35
 - SRC: (2×.45)+(3×.25)+(4×.20)+(1×.10) = 2.55
 - HE: (2×.40)+(4×.30)+(1×.20)+(1×.10) = 2.30
-- AR: (4×.50)+(4×.25)+(1×.15)+(2×.10) = 3.35
-- **DR: (5×.45)+(2×.25)+(3×.15)+(4×.15) = 3.80** ← Highest
-- AT: (5×.45)+(4×.30)+(4×.15)+(4×.10) = 4.45 ← Highest
+- AR: **0** (SolutionExists=1 < 3, nothing to attack yet)
+- DR: (5×.50)+(3×.20)+(4×.15)+(4×.15) = 4.30
+- **AT: (5×.45)+(4×.30)+(4×.15)+(4×.10) = 4.45** ← Highest
+- RTR: (2×.50)+(4×.25)+(2×.15)+(1×.10) = 2.40
 
 ### Recommendation
 **Primary**: Analogical Transfer (4.45) - Look at how other governance challenges were solved
@@ -292,7 +387,19 @@ If patterns share significant assumptions, apply -5% adjustment.
 
 ## Version History
 
-**V2.0** (Current):
+**V2.1** (Current):
+- Added RTR (Rapid Triage Reasoning) for time-critical decisions
+- Added NDF (Negotiated Decision Framework) for multi-stakeholder coordination
+- Total: 9 reasoning patterns (up from 7 in V2.0)
+- Added 3 new dimensions: SolutionExists, TimePressure, StakeholderComplexity
+- Fixed AR formula: now requires SolutionExists ≥ 3
+- Fixed DR formula: SingleAnswer no longer penalized when OpposingViews high
+- Added uncertainty propagation for close pattern scores
+- Added Time Pressure fast-path (auto-selects RTR when TimePressure=5)
+- Added NDF validation (requires StakeholderComplexity ≥ 3)
+- Enhanced orchestration table with RTR and NDF combinations
+
+**V2.0**:
 - Added 4 new patterns: HE, AR, DR, AT
 - Replaced decision tree with weighted multi-dimensional scoring
 - Added 15-minute feedback checkpoint
