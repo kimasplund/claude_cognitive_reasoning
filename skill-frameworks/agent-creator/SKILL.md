@@ -107,7 +107,10 @@ Do NOT use for:
 - State tracking across phases
 - Examples: legal-agent, ceo-orchestrator, agent-hr-manager
 
-**When to use integrated-reasoning**: 8+ decision dimensions, strategic importance, >90% confidence required
+**When to use integrated-reasoning-v2**: 8+ decision dimensions, strategic importance, >90% confidence required
+- **9 patterns available**: ToT, BoT, SRC, HE, AR, DR, AT, RTR, NDF
+- **11 scoring dimensions** for pattern selection
+- See `cognitive-skills/INTEGRATION_GUIDE.md` for full integration patterns
 
 #### 2.2 Design Phase Structure
 
@@ -459,11 +462,20 @@ cp my-agent-patterns.md ~/.claude/agents-library/refs/
 - Existing agent has quality score <40
 - Existing agent >300 lines and unmaintainable
 
-### Decision Tree 2: When to Use Integrated-Reasoning
+### Decision Tree 2: When to Use Cognitive Reasoning Patterns
 
-**Use integrated-reasoning** when:
+**Use integrated-reasoning-v2** (meta-orchestrator) when:
 - **8+ decision dimensions** (architecture, tools, phases, quality, deployment, etc.)
 - **Strategic importance** (affects multiple projects, long-term impact)
+- **Uncertain which reasoning pattern** is best for the problem
+
+**Direct pattern selection** (skip meta-orchestrator):
+- **Diagnosis/debugging** → Use hypothesis-elimination (HE)
+- **Security review** → Use adversarial-reasoning (AR)
+- **Trade-off resolution** → Use dialectical-reasoning (DR)
+- **Novel problem** → Use analogical-transfer (AT)
+- **Time pressure** → Use rapid-triage-reasoning (RTR)
+- **Stakeholder coordination** → Use negotiated-decision-framework (NDF)
 - **High confidence required** (>90%, mission-critical)
 - **Complex trade-offs** (performance vs accuracy, simplicity vs power)
 
