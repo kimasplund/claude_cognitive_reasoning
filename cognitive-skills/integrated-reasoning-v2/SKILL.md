@@ -184,6 +184,104 @@ Apply -5% to final confidence for each uncertain dimension that affects the winn
 
 ---
 
+## Parallel Execution Integration
+
+### When to Parallelize
+
+Parallel execution is appropriate when independent reasoning paths can run concurrently without blocking each other:
+
+| Condition | Parallelization Strategy |
+|-----------|-------------------------|
+| **Top 2 patterns within 0.3 of each other** | Run both patterns in parallel, compare results |
+| **BoT natural parallelism** | 8-10 branches can explore simultaneously |
+| **Hypothesis testing (HE)** | Parallel evidence gathering for multiple hypotheses |
+| **Multi-perspective needs (MoA pattern)** | Different "expert personas" analyze in parallel |
+
+### Parallel Orchestration Patterns
+
+| Pattern Combination | Parallel Strategy | Merge Approach |
+|--------------------|-------------------|----------------|
+| **BoT \|\| AT** | Parallel exploration from different angles | Merge findings, deduplicate insights |
+| **ToT branches** | Parallel subtree exploration at each level | Take best-scoring subtree |
+| **HE hypotheses** | Parallel evidence collection for each hypothesis | Aggregate evidence, eliminate losers |
+| **AR attacks** | Parallel threat simulation (different attack vectors) | Union of discovered vulnerabilities |
+
+### Parallel Configuration
+
+```yaml
+parallel_config:
+  max_concurrent_patterns: 3      # Max patterns running simultaneously
+  max_concurrent_branches: 8      # Max branches within a single pattern
+  merge_strategy: "consensus"     # "consensus" | "voting" | "aggregation" | "best-of-n"
+  timeout_per_branch_ms: 60000    # 60 second timeout per branch
+  early_termination_threshold: 0.95  # Stop early if confidence exceeds this
+```
+
+**Configuration Guidelines**:
+- Use `max_concurrent_patterns: 2` for typical orchestration
+- Use `max_concurrent_branches: 8` for BoT exploration
+- Increase `timeout_per_branch_ms` for complex sub-problems
+- Lower `early_termination_threshold` (e.g., 0.85) when speed matters more than certainty
+
+### Merge Strategies
+
+| Strategy | When to Use | Behavior |
+|----------|-------------|----------|
+| **Consensus** | High-stakes, need confidence | All must agree → boost confidence by +10%; any disagreement → flag for review |
+| **Voting** | Multiple viable options | Majority wins; ties broken by highest individual confidence |
+| **Aggregation** | Complementary findings | Synthesize all findings into unified result; no filtering |
+| **Best-of-N** | Competitive exploration | Take highest confidence result; discard others |
+
+**Merge Strategy Selection**:
+```
+If robustness critical → "consensus"
+If options are mutually exclusive → "voting"
+If findings are additive → "aggregation"
+If racing for speed → "best-of-n"
+```
+
+### Integration with .reasoning/ Protocol
+
+Parallel execution integrates with the `.reasoning/` handover protocol:
+
+```
+.reasoning/
+├── current-context.md         # Master context (shared by all branches)
+├── parallel-session/
+│   ├── config.yaml            # Parallel execution configuration
+│   ├── branch-001/
+│   │   ├── approach.md        # Pattern being applied
+│   │   ├── findings.md        # Intermediate findings
+│   │   └── confidence.json    # Branch confidence score
+│   ├── branch-002/
+│   │   ├── approach.md
+│   │   ├── findings.md
+│   │   └── confidence.json
+│   └── branch-N/
+│       └── ...
+├── merge-result.md            # Synthesized output from all branches
+└── handover.md                # Final handover (captures all branch insights)
+```
+
+**Protocol Rules**:
+1. Each parallel branch writes to its own `branch-{id}/` directory
+2. Branches read shared context but do NOT write to shared files
+3. Merge phase reads all branches, applies merge strategy
+4. Handover document captures insights from ALL branches (not just winner)
+5. Failed branches are preserved for debugging (marked with `status: failed`)
+
+**Branch Handover Template**:
+```markdown
+## Branch {id} Summary
+- **Pattern Applied**: [pattern name]
+- **Conclusion**: [finding]
+- **Confidence**: [X]%
+- **Key Insights**: [unique contributions]
+- **Disagreements**: [where this branch diverged from others]
+```
+
+---
+
 ## Feedback Loop: 15-Minute Checkpoint
 
 **After 15 minutes of applying selected pattern:**
@@ -342,6 +440,23 @@ If patterns share significant assumptions, apply -5% adjustment.
 
 "I'm not sure which to use"
   → Score the dimensions (Step 1)
+
+--- Parallelism Quick-Reference ---
+
+"Top 2 patterns scored within 0.3"
+  → Run both in parallel, merge with "consensus" or "voting"
+
+"Need to explore many options fast"
+  → Use BoT with max_concurrent_branches: 8
+
+"Testing multiple hypotheses"
+  → HE with parallel evidence gathering
+
+"Need diverse perspectives on same problem"
+  → MoA pattern: parallel expert personas
+
+"Running parallel but need to merge"
+  → consensus (high-stakes) | voting (exclusive) | aggregation (additive) | best-of-n (speed)
 ```
 
 ---

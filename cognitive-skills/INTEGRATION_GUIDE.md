@@ -1,12 +1,12 @@
 # Cognitive Skills Integration Guide
 
-**Version**: 1.0
+**Version**: 1.1
 **Updated**: 2026-01-18
 **Purpose**: Guide for integrating cognitive reasoning patterns into AI agents
 
 ## Overview
 
-This guide shows how to integrate the 9 cognitive reasoning methodologies into agent definitions. Each methodology provides structured thinking patterns that improve decision quality and provide auditable reasoning trails.
+This guide shows how to integrate the 9 cognitive reasoning methodologies and parallel execution patterns into agent definitions. Each methodology provides structured thinking patterns that improve decision quality and provide auditable reasoning trails.
 
 ## Quick Reference: Which Pattern for Which Agent Type
 
@@ -283,6 +283,100 @@ When creating or updating an agent, verify:
 | tree-of-thoughts | 1.0 | 5 branches, 4 levels |
 | breadth-of-thought | 1.0 | 8-10 approaches, 40% threshold |
 | self-reflecting-chain | 1.0 | 60% backtrack threshold |
+| reasoning-handover-protocol | 1.0 | .reasoning/ directory, handover schemas, checkpoints (new) |
+| parallel-execution | 1.0 | DPTS, BSM, MoA, GoT, RASC patterns (new) |
+
+---
+
+## Integration Pattern 4: Multi-Pattern Sessions with Handover Protocol
+
+For complex sessions requiring pattern transitions, use the Reasoning Handover Protocol:
+
+```markdown
+**Agent**: Strategic Architect
+**Skills Integration**: integrated-reasoning-v2, reasoning-handover-protocol
+**Session Management**: Uses .reasoning/ directory for state persistence
+
+### Multi-Pattern Session Flow
+
+1. **Session Initialization**
+   - Create .reasoning/session-{uuid}/ directory
+   - Initialize manifest.json with problem and IR-v2 dimensions
+   - Score dimensions to determine orchestration strategy
+
+2. **Pattern Execution with Handover**
+   - Execute first pattern (e.g., BoT for exploration)
+   - On pattern completion, write handover file
+   - Load handover context into next pattern (e.g., ToT for optimization)
+   - Checkpoint at each transition
+
+3. **Parallel Branch Management**
+   - If IR-v2 recommends parallel (AT || BoT), spawn branches
+   - Merge results using agreement analysis
+   - Apply confidence adjustments per protocol
+
+4. **Session Completion**
+   - Write final synthesis to ./synthesis/
+   - Archive session after 30 days
+```
+
+**Reference**: See `reasoning-handover-protocol/SKILL.md` for full protocol specification.
+
+---
+
+## Integration Pattern 5: Parallel Execution Acceleration
+
+For agents that need to accelerate reasoning through parallelization:
+
+```markdown
+**Agent**: Architecture Evaluator
+**Skills Integration**: breadth-of-thought, parallel-execution
+**Execution Strategy**: Fan-out/Fan-in with DPTS
+
+### Parallel BoT Execution
+
+1. **Fan-Out Phase**
+   - Spawn 8-10 workers for Level 0 approaches
+   - Each worker explores independently
+   - Workers share evidence repository
+
+2. **Dynamic Pruning (DPTS)**
+   - Calculate threshold: max(0.40, best_confidence - 0.30)
+   - Prune branches below threshold
+   - Reallocate workers to promising branches
+
+3. **Fan-In Phase**
+   - Collect results from all completed workers
+   - Apply merge strategy (aggregation for BoT)
+   - Document pruned branches with rationale
+
+### Speedup Expectations
+- BoT Level 0: 4x speedup (embarrassingly parallel)
+- ToT with MCTS: 2.5-3x speedup (some sync needed)
+- HE hypothesis testing: 2.5x speedup (evidence sync points)
+```
+
+### When to Add Parallel Execution
+
+| Situation | Add Parallel? | Pattern |
+|-----------|---------------|---------|
+| BoT exploring 8+ approaches | Yes | Fan-out/Fan-in |
+| ToT evaluating branches | Yes | DPTS or MCTS |
+| HE testing hypotheses | Yes | Parallel evidence gathering |
+| SRC sequential trace | No | Dependencies prevent parallelism |
+| Need ensemble confidence | Yes | MoA or RASC |
+| Cross-domain analogies | Yes | MoA with AT proposers |
+
+### Parallel Execution Checklist
+
+Before parallelizing:
+- [ ] Tasks are independent (no shared state dependencies)
+- [ ] Merge strategy defined (voting, aggregation, synthesis)
+- [ ] Checkpoint integration configured
+- [ ] Failure handling defined (retry/skip/abort)
+- [ ] Resource limits set (max workers, timeout)
+
+**Reference**: See `parallel-execution/SKILL.md` for full pattern documentation.
 
 ---
 
