@@ -1,0 +1,259 @@
+{
+  "pattern": "ToT",
+  "version": "1.0",
+  "started_at": "2026-01-18T14:25:00Z",
+  "completed_at": "2026-01-18T14:55:00Z",
+  "current_phase": "completed",
+
+  "handover_received": {
+    "from": "BoT",
+    "handover_id": "001-bot-to-tot",
+    "starting_confidence": 0.70,
+    "approaches_inherited": ["approach-2", "approach-1"]
+  },
+
+  "tree": {
+    "root": {
+      "problem": "Improve API performance - select and optimize best approach",
+      "evaluation_criteria": [
+        "Latency impact (weight: 30%)",
+        "Implementation complexity (weight: 25%)",
+        "Risk level (weight: 20%)",
+        "Maintenance burden (weight: 15%)",
+        "Constraint compliance (weight: 10%)"
+      ]
+    },
+    "levels": [
+      {
+        "level": 0,
+        "description": "Compare top 2 approaches from BoT",
+        "branches": [
+          {
+            "id": "branch-1",
+            "name": "Database Query Optimization",
+            "inherited_from": "approach-2",
+            "analysis": "Focus on identifying and fixing N+1 queries, adding strategic indexes, and implementing query batching. Analysis shows 60% of latency comes from 3 endpoints with unoptimized queries.",
+            "self_reflection": {
+              "confidence": 82,
+              "strengths": [
+                "Directly addresses root cause of latency",
+                "Zero infrastructure cost",
+                "Permanent improvement once fixed",
+                "Can be done incrementally per endpoint"
+              ],
+              "weaknesses": [
+                "Requires detailed profiling first",
+                "Some queries may need schema changes",
+                "Index additions have write performance cost"
+              ],
+              "recommendation": "Strong candidate - proceed to deeper evaluation"
+            },
+            "scores": {
+              "latency_impact": 27,
+              "implementation_complexity": 22,
+              "risk_level": 18,
+              "maintenance_burden": 14,
+              "constraint_compliance": 10,
+              "total": 91
+            },
+            "status": "selected_for_depth"
+          },
+          {
+            "id": "branch-2",
+            "name": "Response Caching with Redis",
+            "inherited_from": "approach-1",
+            "analysis": "Implement cache-aside pattern with Redis. TTL strategy based on endpoint volatility. Estimated cache hit rate of 70% for eligible endpoints.",
+            "self_reflection": {
+              "confidence": 75,
+              "strengths": [
+                "Immediate latency reduction on cache hits",
+                "Well-understood pattern",
+                "Good for read-heavy endpoints"
+              ],
+              "weaknesses": [
+                "Cache invalidation is complex",
+                "May need new Redis infrastructure (cost)",
+                "Stale data risk for dynamic content",
+                "Not applicable for write-heavy endpoints"
+              ],
+              "recommendation": "Good complement but uncertain on infrastructure constraint"
+            },
+            "scores": {
+              "latency_impact": 25,
+              "implementation_complexity": 18,
+              "risk_level": 15,
+              "maintenance_burden": 10,
+              "constraint_compliance": 6,
+              "total": 74
+            },
+            "status": "not_selected"
+          }
+        ],
+        "winner": "branch-1",
+        "winner_score": 91
+      },
+      {
+        "level": 1,
+        "description": "Deep dive on DB optimization strategies",
+        "branches": [
+          {
+            "id": "branch-1.1",
+            "name": "Query Rewriting (N+1 elimination)",
+            "analysis": "Replace N+1 patterns with eager loading and batch queries. Identified 12 N+1 patterns across 3 critical endpoints. Expected 40% latency reduction on affected endpoints.",
+            "self_reflection": {
+              "confidence": 88,
+              "strengths": ["Highest impact fix", "Well-understood solution", "No schema changes"],
+              "weaknesses": ["Requires careful testing", "Some ORM limitations"],
+              "recommendation": "Highest priority - implement first"
+            },
+            "scores": {
+              "latency_impact": 28,
+              "implementation_complexity": 23,
+              "risk_level": 17,
+              "maintenance_burden": 14,
+              "constraint_compliance": 10,
+              "total": 92
+            },
+            "status": "selected_for_depth"
+          },
+          {
+            "id": "branch-1.2",
+            "name": "Strategic Index Addition",
+            "analysis": "Add composite indexes for frequent query patterns. EXPLAIN analysis shows 5 full table scans that can be eliminated.",
+            "self_reflection": {
+              "confidence": 85,
+              "strengths": ["Proven approach", "Low implementation risk"],
+              "weaknesses": ["Write performance impact", "Index maintenance cost"],
+              "recommendation": "Good complement to query rewriting"
+            },
+            "scores": {
+              "latency_impact": 24,
+              "implementation_complexity": 24,
+              "risk_level": 18,
+              "maintenance_burden": 12,
+              "constraint_compliance": 10,
+              "total": 88
+            },
+            "status": "complement"
+          },
+          {
+            "id": "branch-1.3",
+            "name": "Connection Pool Tuning",
+            "analysis": "Current pool size 10, optimal estimated at 25-30. Connection wait times contributing ~15ms to latency.",
+            "self_reflection": {
+              "confidence": 80,
+              "strengths": ["Configuration-only change", "Zero code changes"],
+              "weaknesses": ["Limited impact ceiling (~15ms)", "Requires load testing"],
+              "recommendation": "Quick win - implement as part of solution"
+            },
+            "scores": {
+              "latency_impact": 18,
+              "implementation_complexity": 25,
+              "risk_level": 19,
+              "maintenance_burden": 14,
+              "constraint_compliance": 10,
+              "total": 86
+            },
+            "status": "complement"
+          }
+        ],
+        "winner": "branch-1.1",
+        "winner_score": 92
+      },
+      {
+        "level": 2,
+        "description": "Implementation approach for N+1 elimination",
+        "branches": [
+          {
+            "id": "branch-1.1.1",
+            "name": "ORM-level eager loading",
+            "analysis": "Use ORM includes/preload to fetch associations in single queries. Works for 8 of 12 N+1 patterns.",
+            "self_reflection": {
+              "confidence": 90,
+              "strengths": ["Minimal code changes", "ORM handles complexity"],
+              "weaknesses": ["Some edge cases need raw SQL"],
+              "recommendation": "Primary approach for most patterns"
+            },
+            "scores": {
+              "latency_impact": 26,
+              "implementation_complexity": 24,
+              "risk_level": 18,
+              "maintenance_burden": 14,
+              "constraint_compliance": 10,
+              "total": 92
+            },
+            "status": "winner"
+          },
+          {
+            "id": "branch-1.1.2",
+            "name": "DataLoader batching pattern",
+            "analysis": "Implement DataLoader-style batching for GraphQL-like deferred resolution.",
+            "self_reflection": {
+              "confidence": 75,
+              "strengths": ["Elegant solution", "Handles complex graphs"],
+              "weaknesses": ["More complex implementation", "Team unfamiliar with pattern"],
+              "recommendation": "Consider for remaining 4 patterns"
+            },
+            "scores": {
+              "latency_impact": 24,
+              "implementation_complexity": 18,
+              "risk_level": 14,
+              "maintenance_burden": 11,
+              "constraint_compliance": 10,
+              "total": 77
+            },
+            "status": "alternative"
+          }
+        ],
+        "winner": "branch-1.1.1",
+        "winner_score": 92
+      }
+    ],
+    "current_level": 2,
+    "winning_path": ["branch-1", "branch-1.1", "branch-1.1.1"]
+  },
+
+  "winning_solution": {
+    "path": "DB Optimization > N+1 Elimination > ORM Eager Loading",
+    "components": [
+      {
+        "priority": 1,
+        "action": "Implement ORM eager loading for 8 N+1 patterns",
+        "expected_impact": "40% latency reduction on affected endpoints"
+      },
+      {
+        "priority": 2,
+        "action": "Add 5 composite indexes for full table scan elimination",
+        "expected_impact": "20% additional latency reduction"
+      },
+      {
+        "priority": 3,
+        "action": "Increase connection pool from 10 to 25",
+        "expected_impact": "~15ms latency reduction"
+      }
+    ],
+    "combined_expected_impact": "55-65% latency reduction, exceeding 50% target",
+    "final_score": 92,
+    "confidence": 0.88
+  },
+
+  "alternatives_considered": [
+    {
+      "path": "Response Caching with Redis",
+      "final_score": 74,
+      "why_not_selected": "Infrastructure cost uncertainty, cache invalidation complexity, less effective for write-heavy endpoints"
+    },
+    {
+      "path": "DB Optimization > N+1 Elimination > DataLoader Pattern",
+      "final_score": 77,
+      "why_not_selected": "Higher implementation complexity, team unfamiliar with pattern"
+    }
+  ],
+
+  "exploration_stats": {
+    "total_branches_explored": 8,
+    "total_levels": 3,
+    "total_time_minutes": 30,
+    "average_branch_confidence": 82
+  }
+}

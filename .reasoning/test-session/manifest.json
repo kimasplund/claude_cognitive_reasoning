@@ -1,0 +1,78 @@
+{
+  "session_id": "20260118-140000-apitest01",
+  "created_at": "2026-01-18T14:00:00Z",
+  "last_updated": "2026-01-18T15:20:00Z",
+  "status": "completed",
+
+  "problem": {
+    "statement": "Improve API performance for high-traffic endpoints",
+    "constraints": [
+      "Must maintain backward compatibility",
+      "Target: <100ms P95 latency",
+      "Handle 10,000 RPS peak load",
+      "No additional infrastructure budget in first phase"
+    ],
+    "success_criteria": [
+      "P95 latency reduced by 50%",
+      "No regression in correctness",
+      "Solution validated against edge cases",
+      "Implementation complexity acceptable"
+    ]
+  },
+
+  "orchestration": {
+    "strategy": "sequential",
+    "planned_patterns": ["BoT", "ToT", "AR"],
+    "current_pattern": null,
+    "pattern_history": [
+      {
+        "pattern": "BoT",
+        "started": "2026-01-18T14:00:00Z",
+        "completed": "2026-01-18T14:25:00Z",
+        "handover_to": "ToT",
+        "handover_file": "./handovers/001-bot-to-tot.json"
+      },
+      {
+        "pattern": "ToT",
+        "started": "2026-01-18T14:25:00Z",
+        "completed": "2026-01-18T14:55:00Z",
+        "handover_to": "AR",
+        "handover_file": "./handovers/002-tot-to-ar.json"
+      },
+      {
+        "pattern": "AR",
+        "started": "2026-01-18T14:55:00Z",
+        "completed": "2026-01-18T15:20:00Z",
+        "handover_to": null,
+        "handover_file": null
+      }
+    ]
+  },
+
+  "dimensions": {
+    "sequential_dependencies": 2,
+    "criteria_clarity": 4,
+    "solution_space_known": 3,
+    "single_answer_needed": 4,
+    "evidence_available": 3,
+    "opposing_valid_views": 3,
+    "problem_novelty": 2,
+    "robustness_required": 5,
+    "solution_exists": 4,
+    "time_pressure": 3,
+    "stakeholder_complexity": 2
+  },
+
+  "confidence": {
+    "overall": 0.79,
+    "by_pattern": {
+      "BoT": 0.75,
+      "ToT": 0.88,
+      "AR": 0.79
+    }
+  },
+
+  "checkpoints": [],
+  "active_handover": null,
+  "synthesis": "./synthesis/conclusion-20260118-152000.json"
+}

@@ -1,0 +1,11 @@
+{
+  "session_id": "20260118-140000-apitest01",
+  "evidence_count": 0,
+  "last_updated": "2026-01-18T15:20:00Z",
+
+  "evidence": [],
+
+  "evidence_by_type": {},
+
+  "note": "This simulation did not gather external evidence. In a real session, evidence would be gathered from profiling tools, load tests, database analysis, etc."
+}

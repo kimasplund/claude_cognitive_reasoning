@@ -15,10 +15,10 @@
 | **ToT** (Tree of Thoughts) | Find best solution through branching exploration |
 | **BoT** (Breadth of Thought) | Exhaustively explore all viable options |
 | **SRC** (Self-Reflecting Chain) | Sequential reasoning with backtracking |
-| **HE** (Hypothesis Exploration) | Test competing hypotheses systematically |
-| **AR** (Analogical Reasoning) | Transfer solutions from similar domains |
+| **HE** (Hypothesis-Elimination) | Diagnose root cause through evidence-based elimination |
+| **AR** (Adversarial Reasoning) | Stress-test solutions via STRIKE framework attacks |
 | **DR** (Dialectical Reasoning) | Resolve tensions through thesis-antithesis-synthesis |
-| **AT** (Abductive Thinking) | Infer best explanation from observations |
+| **AT** (Analogical Transfer) | Solve novel problems via cross-domain parallels |
 | **RTR** (Rapid Triage Reasoning) | Fast decisions under time pressure |
 | **NDF** (Negotiated Decision Framework) | Multi-stakeholder consensus building |
 

@@ -1,0 +1,176 @@
+{
+  "$schema": "reasoning-handover-v1",
+  "handover_id": "001-bot-to-tot",
+  "timestamp": "2026-01-18T14:25:00Z",
+
+  "source_pattern": {
+    "name": "BoT",
+    "version": "1.0",
+    "session_state_path": "./pattern-state/bot/state.json"
+  },
+
+  "target_pattern": {
+    "name": "ToT",
+    "version": "1.0",
+    "recommended_entry_point": "step-2-branch-generation"
+  },
+
+  "context_transfer": {
+    "problem_understanding": "The API performance optimization problem requires reducing P95 latency by 50% while maintaining backward compatibility and operating within existing infrastructure budget. The solution must handle 10,000 RPS peak load.",
+    "constraints_identified": [
+      "Backward compatibility mandatory - no breaking API changes",
+      "No additional infrastructure budget in first phase",
+      "Target: <100ms P95 latency",
+      "Must handle 10,000 RPS peak load"
+    ],
+    "assumptions_made": [
+      "Current P95 latency is approximately 200ms (target: <100ms)",
+      "Database queries are a significant contributor to latency",
+      "Some form of Redis or caching infrastructure may already exist",
+      "Client applications cannot be modified in short term"
+    ]
+  },
+
+  "deliverables": {
+    "type": "approaches",
+    "items": [
+      {
+        "id": "approach-2",
+        "name": "Database Query Optimization",
+        "confidence": 0.78,
+        "summary": "Optimize slow queries, add indexes, fix N+1 patterns, improve connection pooling"
+      },
+      {
+        "id": "approach-1",
+        "name": "Response Caching with Redis",
+        "confidence": 0.72,
+        "summary": "Multi-tier caching with intelligent TTL and cache-aside pattern"
+      },
+      {
+        "id": "approach-4",
+        "name": "API Response Compression",
+        "confidence": 0.58,
+        "summary": "Enable compression, optimize payloads, implement field selection"
+      },
+      {
+        "id": "approach-3",
+        "name": "Async Processing",
+        "confidence": 0.45,
+        "summary": "Background workers for expensive operations (constraint conflict noted)"
+      }
+    ],
+    "confidence_scores": {
+      "approach-2": 0.78,
+      "approach-1": 0.72,
+      "approach-4": 0.58,
+      "approach-3": 0.45
+    }
+  },
+
+  "evidence_chain": {
+    "sources_used": [
+      "Problem constraints analysis",
+      "Standard performance optimization patterns",
+      "Infrastructure constraint evaluation"
+    ],
+    "key_findings": [
+      "Database optimization has highest feasibility given constraints",
+      "Caching is viable if infrastructure already exists",
+      "Async processing conflicts with backward compatibility requirement",
+      "Compression alone insufficient but valuable as complement"
+    ],
+    "reference_paths": []
+  },
+
+  "recommendations": {
+    "focus_areas": [
+      "Evaluate top 2 approaches (DB optimization, Caching) in depth",
+      "Consider hybrid approach combining DB + Compression",
+      "Investigate if Redis already exists in infrastructure"
+    ],
+    "avoid_areas": [
+      "Async processing unless specific endpoints identified where breaking changes acceptable",
+      "Solutions requiring significant new infrastructure"
+    ],
+    "open_questions": [
+      "What is current database query profile? Which queries are slowest?",
+      "Does Redis or similar cache already exist?",
+      "What percentage of requests are cache-eligible (read vs write ratio)?"
+    ]
+  },
+
+  "bot_specific": {
+    "exploration_summary": {
+      "level_0_approaches": 4,
+      "level_1_subapproaches": 0,
+      "total_explored": 4,
+      "retained_above_40pct": 4
+    },
+
+    "approach_registry": [
+      {
+        "id": "approach-2",
+        "name": "Database Query Optimization",
+        "level": 0,
+        "confidence": 0.78,
+        "status": "retained",
+        "strengths": ["Addresses root cause", "No infrastructure changes", "Permanent improvement"],
+        "weaknesses": ["Time-intensive analysis", "May need schema changes"],
+        "best_for": "When database queries are primary latency contributor"
+      },
+      {
+        "id": "approach-1",
+        "name": "Response Caching with Redis",
+        "level": 0,
+        "confidence": 0.72,
+        "status": "retained",
+        "strengths": ["Immediate latency reduction", "Well-understood technology"],
+        "weaknesses": ["Cache invalidation complexity", "Memory costs"],
+        "best_for": "High read-to-write ratio endpoints"
+      }
+    ],
+
+    "pruned_approaches": [],
+
+    "top_viable": ["approach-2", "approach-1"],
+
+    "handover_recommendation": {
+      "to_tot": "Evaluate top 2 approaches against latency and feasibility criteria. Consider hybrid solution.",
+      "to_he": "Not applicable - this is optimization, not diagnosis",
+      "to_ar": "After ToT selects winner, validate against edge cases and failure modes"
+    }
+  },
+
+  "confidence_transfer": {
+    "source_confidence": {
+      "pattern": "BoT",
+      "score": 0.75,
+      "basis": "4 of 4 approaches retained, good diversity, clear ranking emerged"
+    },
+
+    "transfer_adjustments": {
+      "scope_change": -0.03,
+      "information_loss": -0.02,
+      "pattern_alignment": 0.00
+    },
+
+    "target_starting_confidence": {
+      "pattern": "ToT",
+      "score": 0.70,
+      "rationale": "Starting ToT with pre-filtered approaches. Minor uncertainty from narrowing scope to top 2."
+    },
+
+    "shared_assumption_discount": {
+      "applied": true,
+      "discount": -0.05,
+      "reason": "Same LLM analyzing same problem - potential shared blind spots"
+    }
+  },
+
+  "metadata": {
+    "duration_minutes": 25,
+    "approaches_explored": 4,
+    "approaches_retained": 4,
+    "confidence_at_handover": 0.75
+  }
+}
