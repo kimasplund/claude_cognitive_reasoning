@@ -509,6 +509,21 @@ Confidence scores must be recalibrated during handover:
 
 ---
 
+## Cycle Detection
+
+**Max Handover Chain Length**: 5 (prevents runaway chains)
+
+**Cycle Detection Rules**:
+1. Track all (from_pattern, to_pattern) pairs in manifest
+2. If any pair repeats -> BLOCK handover
+3. If chain length exceeds 5 -> BLOCK and synthesize current state
+
+**Example Blocked Cycles**:
+- AR -> BoT -> ToT -> AR (AR repeated)
+- BoT -> ToT -> BoT (BoT repeated)
+
+---
+
 ## Part 3: Integration Points
 
 ### 3.1 IR-v2 Orchestrator Integration

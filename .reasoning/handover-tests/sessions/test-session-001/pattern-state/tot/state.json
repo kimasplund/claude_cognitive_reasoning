@@ -1,0 +1,136 @@
+{
+  "pattern": "ToT",
+  "version": "1.0",
+  "started_at": "2026-01-18T10:30:00Z",
+  "current_phase": "step-4-recursive-depth",
+  "loaded_from_handover": "001-bot-to-tot.json",
+
+  "tree": {
+    "root": {
+      "problem": "Design caching system for e-commerce platform",
+      "evaluation_criteria": ["latency", "availability", "scalability", "cost", "maintainability"],
+      "inherited_from_bot": {
+        "top_approaches": ["Redis Cluster", "Hybrid multi-tier", "CDN Edge Caching"],
+        "source_confidence": 0.78
+      }
+    },
+    "levels": [
+      {
+        "level": 0,
+        "branches": [
+          {
+            "id": "branch-1",
+            "name": "Redis Cluster (from BoT approach-1)",
+            "analysis": "Distributed in-memory caching with automatic sharding",
+            "self_reflection": {
+              "confidence": 82,
+              "strengths": ["Mature ecosystem", "Strong community", "Rich features"],
+              "weaknesses": ["Memory costs at scale", "Operational complexity"],
+              "recommendation": "Strong candidate, evaluate against hybrid"
+            },
+            "scores": {
+              "novelty": 12,
+              "feasibility": 19,
+              "completeness": 18,
+              "confidence": 16,
+              "alignment": 18,
+              "total": 83
+            },
+            "status": "explored",
+            "selected_for_depth": true
+          },
+          {
+            "id": "branch-2",
+            "name": "Hybrid multi-tier (from BoT approach-7)",
+            "analysis": "L1 local cache + L2 Redis distributed cache",
+            "self_reflection": {
+              "confidence": 85,
+              "strengths": ["Best latency profile", "Reduced network calls"],
+              "weaknesses": ["Cache coherence complexity", "More components"],
+              "recommendation": "Best fit for latency requirements"
+            },
+            "scores": {
+              "novelty": 16,
+              "feasibility": 17,
+              "completeness": 17,
+              "confidence": 17,
+              "alignment": 19,
+              "total": 86
+            },
+            "status": "explored",
+            "selected_for_depth": true
+          },
+          {
+            "id": "branch-3",
+            "name": "CDN Edge Caching (from BoT approach-2)",
+            "analysis": "Static content at edge, dynamic via origin",
+            "self_reflection": {
+              "confidence": 72,
+              "strengths": ["Global coverage", "Offloads origin"],
+              "weaknesses": ["Limited to static", "Invalidation lag"],
+              "recommendation": "Complementary to other solutions, not standalone"
+            },
+            "scores": {
+              "novelty": 10,
+              "feasibility": 18,
+              "completeness": 14,
+              "confidence": 14,
+              "alignment": 15,
+              "total": 71
+            },
+            "status": "explored",
+            "selected_for_depth": false
+          }
+        ],
+        "winner": "branch-2",
+        "winner_score": 86
+      },
+      {
+        "level": 1,
+        "branches": [
+          {
+            "id": "branch-2.1",
+            "name": "Caffeine L1 + Redis L2",
+            "analysis": "Java Caffeine for in-process, Redis Cluster for distributed",
+            "scores": {"total": 84},
+            "status": "explored"
+          },
+          {
+            "id": "branch-2.2",
+            "name": "Guava L1 + Redis L2",
+            "analysis": "Google Guava cache locally, Redis distributed",
+            "scores": {"total": 81},
+            "status": "explored"
+          },
+          {
+            "id": "branch-2.3",
+            "name": "Caffeine L1 + Redis L2 + CDN L0",
+            "analysis": "Three-tier: CDN for static, Caffeine for hot, Redis for warm",
+            "scores": {"total": 89},
+            "status": "explored",
+            "selected_for_depth": true
+          }
+        ],
+        "winner": "branch-2.3",
+        "winner_score": 89
+      }
+    ],
+    "current_level": 1,
+    "winning_path": ["branch-2", "branch-2.3"]
+  },
+
+  "handover_context_verification": {
+    "context_preserved": true,
+    "original_problem": "Design caching system for e-commerce platform",
+    "constraints_inherited": ["99.9% availability", "<50ms latency", "1M concurrent users"],
+    "confidence_received": 0.75,
+    "confidence_current": 0.82,
+    "confidence_justified": "ToT narrowed options and found high-scoring path"
+  },
+
+  "exploration_stats": {
+    "total_branches_explored": 6,
+    "total_time_minutes": 25,
+    "average_branch_confidence": 80
+  }
+}

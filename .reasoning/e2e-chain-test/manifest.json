@@ -1,0 +1,90 @@
+{
+  "session_id": "20260118-120000-e2e-test",
+  "created_at": "2026-01-18T12:00:00Z",
+  "last_updated": "2026-01-18T12:45:00Z",
+  "status": "completed",
+  "test_type": "end-to-end-chain-validation",
+
+  "problem": {
+    "statement": "Our API response times have degraded from 200ms to 2000ms over the past week. Users are complaining. Find the cause and recommend a fix.",
+    "constraints": [
+      "Production system - cannot take offline",
+      "Users actively complaining - urgency required",
+      "No recent deployments in last 7 days",
+      "Monitoring shows gradual degradation, not sudden spike"
+    ],
+    "success_criteria": [
+      "Root cause identified with evidence",
+      "Fix recommendation with implementation steps",
+      "Confidence in diagnosis > 80%",
+      "Response time back to <200ms target"
+    ]
+  },
+
+  "orchestration": {
+    "strategy": "sequential",
+    "planned_patterns": ["RTR", "HE", "ToT"],
+    "current_pattern": null,
+    "pattern_history": [
+      {
+        "pattern": "RTR",
+        "started": "2026-01-18T12:00:00Z",
+        "completed": "2026-01-18T12:10:00Z",
+        "handover_to": "HE",
+        "handover_file": "./step-3-handovers/001-rtr-to-he.json"
+      },
+      {
+        "pattern": "HE",
+        "started": "2026-01-18T12:10:00Z",
+        "completed": "2026-01-18T12:35:00Z",
+        "handover_to": "ToT",
+        "handover_file": "./step-3-handovers/002-he-to-tot.json"
+      },
+      {
+        "pattern": "ToT",
+        "started": "2026-01-18T12:35:00Z",
+        "completed": "2026-01-18T12:45:00Z",
+        "handover_to": null,
+        "handover_file": null
+      }
+    ]
+  },
+
+  "dimensions": {
+    "sequential_dependencies": 2,
+    "criteria_clarity": 4,
+    "solution_space_known": 2,
+    "single_answer_needed": 5,
+    "evidence_available": 5,
+    "opposing_valid_views": 2,
+    "problem_novelty": 2,
+    "robustness_required": 4,
+    "solution_exists": 1,
+    "time_pressure": 4,
+    "stakeholder_complexity": 2
+  },
+
+  "confidence": {
+    "overall": 0.82,
+    "by_pattern": {
+      "RTR": 0.70,
+      "HE": 0.85,
+      "ToT": 0.88
+    },
+    "aggregation_method": "sequential_chain_with_handover_adjustments"
+  },
+
+  "validation_results": {
+    "patterns_chained_correctly": true,
+    "handovers_preserved_context": true,
+    "confidence_aggregated_properly": true,
+    "sequential_parallel_decision_correct": true,
+    "final_output_coherent": true
+  },
+
+  "checkpoints": [
+    "checkpoint-20260118-121000.json",
+    "checkpoint-20260118-123500.json"
+  ],
+  "active_handover": null
+}

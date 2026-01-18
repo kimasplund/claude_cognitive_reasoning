@@ -124,6 +124,206 @@ Ralph is a Claude Code plugin that provides:
 
 ---
 
+## Iteration Safeguards
+
+### Hard Limits
+
+Ralph-loop MUST enforce these limits to prevent runaway iterations:
+
+- **MAX_ITERATIONS**: 5 (default)
+- **MAX_TOKENS_PER_ITERATION**: 50,000
+- **MAX_TOTAL_TIME**: 30 minutes
+- **CONFIDENCE_PLATEAU_THRESHOLD**: 3 iterations with <2% improvement → stop
+
+### Stop Conditions (ANY triggers exit)
+
+1. Confidence >= target (success)
+2. MAX_ITERATIONS reached (bounded failure)
+3. Confidence plateau detected (diminishing returns)
+4. Time limit exceeded (timeout)
+5. User interrupt (manual stop)
+6. Error in pattern execution (fail-safe)
+
+```markdown
+## Stop Condition Evaluation Order
+
+1. Check for errors/interrupts (fail-safe, highest priority)
+2. Check confidence >= target (success condition)
+3. Check iteration count >= MAX_ITERATIONS
+4. Check time elapsed >= MAX_TOTAL_TIME
+5. Check plateau detection (last 3 iterations)
+
+If ANY condition triggers → EXIT immediately with status report
+```
+
+### Safeguard Configuration
+
+```json
+{
+  "iteration_safeguards": {
+    "max_iterations": 5,
+    "max_tokens_per_iteration": 50000,
+    "max_total_time_minutes": 30,
+    "plateau_detection": {
+      "window_size": 3,
+      "min_improvement_percent": 2
+    },
+    "exit_on_error": true,
+    "allow_user_override": true
+  }
+}
+```
+
+---
+
+## Iteration Log Template
+
+Track all iterations systematically:
+
+| Iteration | Pattern | Confidence | Delta | Time | Decision |
+|-----------|---------|------------|-------|------|----------|
+| 1 | [pattern] | [X]% | - | [Xm] | continue/stop |
+| 2 | [pattern] | [Y]% | +Z% | [Xm] | continue/stop |
+| ... | | | | | |
+
+### Plateau Detection
+
+**Rule**: If iterations 3, 4, 5 all show delta < 2%, STOP.
+
+```markdown
+## Plateau Detection Example
+
+| Iteration | Confidence | Delta | Plateau Count |
+|-----------|------------|-------|---------------|
+| 1 | 72% | - | 0 |
+| 2 | 78% | +6% | 0 |
+| 3 | 79% | +1% | 1 (< 2%) |
+| 4 | 80% | +1% | 2 (< 2%) |
+| 5 | 80.5% | +0.5% | 3 (< 2%) → STOP |
+
+**Decision**: Plateau detected at iteration 5. Further iterations unlikely
+to reach 90% target. Exit with 80.5% confidence and document gap.
+```
+
+### Iteration Log Example
+
+```markdown
+## Ralph-Loop Iteration Log: auth-system-design
+
+| Iter | Pattern | Confidence | Delta | Time | Cumulative | Decision |
+|------|---------|------------|-------|------|------------|----------|
+| 1 | BoT | 65% | - | 12m | 12m | continue |
+| 2 | ToT | 78% | +13% | 15m | 27m | continue |
+| 3 | AR | 85% | +7% | 10m | 37m | STOP (time limit approaching) |
+
+**Exit Reason**: MAX_TOTAL_TIME approaching (37m/30m - override allowed)
+**Final Confidence**: 85%
+**Gap to Target**: 5% (target was 90%)
+**Recommendation**: Document remaining uncertainty, proceed with caveats
+```
+
+---
+
+## Pattern Switching During Iteration
+
+### When to Re-evaluate Pattern Selection
+
+If after iteration N:
+- Confidence stuck → Re-score IR-v2 dimensions
+- New information → May change optimal pattern
+- Different pattern scores higher → SWITCH (with handover)
+
+### Pattern Switch Decision Flow
+
+```
+After Iteration N:
+├─ Confidence increased significantly (>5%)?
+│   └─ YES → Continue with current pattern
+│   └─ NO  → Re-score IR-v2 dimensions
+│
+├─ New pattern scores higher?
+│   └─ YES → Initiate pattern switch with handover
+│   └─ NO  → Continue current pattern (1 more iteration)
+│
+└─ 2 consecutive low-improvement iterations?
+    └─ YES → FORCE re-evaluation or STOP
+    └─ NO  → Continue
+```
+
+### Pattern Switch Example
+
+```markdown
+## Pattern Switch: ToT → HE
+
+### Iteration History
+| Iter | Pattern | Confidence | Delta |
+|------|---------|------------|-------|
+| 1 | ToT | 65% | - |
+| 2 | ToT | 68% | +3% (low) |
+
+### Re-evaluation Trigger
+- Delta < 5% for 2 iterations
+- Re-scoring IR-v2 dimensions with new information
+
+### IR-v2 Re-scoring
+**New Information**: Error logs reveal intermittent pattern
+**Original Scores**: ToT (4.2), HE (3.8)
+**Updated Scores**: ToT (3.5), HE (4.6)
+
+**Reason**: Problem is actually root cause diagnosis, not optimization
+
+### Switch Decision
+- **From**: ToT (optimization)
+- **To**: HE (hypothesis elimination)
+- **Handover**: ToT findings become HE initial hypotheses
+
+### Handover Package
+```markdown
+## Handover: ToT → HE
+
+### Findings from ToT (Iterations 1-2)
+- Explored 8 optimization paths
+- Best path: JWT rotation (68% confidence)
+- Blocker: Intermittent failures not explained by any path
+
+### Reframing for HE
+- **Symptom**: Intermittent auth failures
+- **Initial Hypotheses** (from ToT paths):
+  - H1: Token expiry edge case
+  - H2: Clock drift between services
+  - H3: Race condition in refresh flow
+  - H4: External IdP latency
+```
+
+### Iteration 3: HE
+| Iter | Pattern | Confidence | Delta |
+|------|---------|------------|-------|
+| 3 | HE | 82% | +14% |
+
+**Result**: Pattern switch successful. HE identified clock drift (H2).
+```
+
+### Switch Safeguards
+
+- **Max switches per session**: 2 (prevent pattern thrashing)
+- **Handover required**: Cannot switch without documenting state
+- **Cooldown**: Minimum 1 iteration before re-switching
+- **User notification**: Pattern switch logged and visible
+
+### Oscillation Detection
+
+**Oscillation = switching back to a previously used pattern**
+
+If Pattern A -> B -> A detected:
+- STOP immediately
+- Flag as "methodology conflict"
+- Report both patterns' findings
+- Escalate for human decision
+
+**Prevention**: Track all patterns used in session. Block any switch to already-used pattern.
+
+---
+
 ## Integration with IR-v2 Orchestration
 
 ### Ralph-Wrapped IR-v2 Session
@@ -556,6 +756,25 @@ Ralph's state file enables session recovery:
     "enabled": true,
     "state_file": ".claude/ralph-loop.local.md",
 
+    "iteration_safeguards": {
+      "max_iterations": 5,
+      "max_tokens_per_iteration": 50000,
+      "max_total_time_minutes": 30,
+      "plateau_detection": {
+        "window_size": 3,
+        "min_improvement_percent": 2
+      },
+      "exit_on_error": true,
+      "allow_user_override": true
+    },
+
+    "pattern_switching": {
+      "max_switches_per_session": 2,
+      "require_handover": true,
+      "min_iterations_before_reswitch": 1,
+      "reeval_trigger_delta_percent": 5
+    },
+
     "promise_validation": {
       "require_evidence_chain": true,
       "require_ar_for_90_plus": true,
@@ -651,11 +870,20 @@ Ralph-Loop Integration provides:
 4. **IR-v2 Integration**: Seamless pattern switching across iterations
 5. **Checkpoint Integration**: 15-minute checkpoints within ralph iterations
 6. **Anti-Gaming Protection**: Evidence-backed confidence validation
+7. **Iteration Safeguards**: Hard limits prevent runaway loops (MAX_ITERATIONS=5, MAX_TIME=30m)
+8. **Plateau Detection**: Auto-stop when 3 iterations show <2% improvement
+9. **Pattern Switching**: Re-evaluate IR-v2 scores when stuck, switch with handover
 
 Use ralph-loop when high confidence is required and iterative refinement adds value. The overhead of ralph is justified when:
 - Stakes are high (>90% confidence needed)
 - Problem complexity may require pattern switching
 - Self-correction across iterations improves outcome
 - Premature conclusion would be costly
+
+**Critical Safeguards** (always enforced):
+- Maximum 5 iterations (bounded failure)
+- Maximum 30 minutes total time (timeout)
+- Plateau detection after 3 low-improvement iterations (diminishing returns)
+- Maximum 2 pattern switches per session (prevent thrashing)
 
 **Reference**: See `integrated-reasoning-v2/SKILL.md` for pattern selection and `reasoning-handover-protocol/SKILL.md` for state management details.

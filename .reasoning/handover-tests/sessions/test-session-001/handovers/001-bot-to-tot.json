@@ -1,0 +1,118 @@
+{
+  "$schema": "reasoning-handover-v1",
+  "handover_id": "001-bot-to-tot",
+  "timestamp": "2026-01-18T10:30:00Z",
+
+  "source_pattern": {
+    "name": "BoT",
+    "version": "1.0",
+    "session_state_path": "./pattern-state/bot/state.json"
+  },
+
+  "target_pattern": {
+    "name": "ToT",
+    "version": "1.0",
+    "recommended_entry_point": "step-2-branching"
+  },
+
+  "context_transfer": {
+    "problem_understanding": "Design caching system for e-commerce platform requiring 99.9% availability, <50ms latency, and support for 1M concurrent users",
+    "constraints_identified": ["High availability required", "Strict latency requirements", "Scale to millions of users"],
+    "assumptions_made": ["Read-heavy workload typical of e-commerce", "Cache hit ratio >90% achievable", "Budget allows for managed services"]
+  },
+
+  "deliverables": {
+    "type": "approaches",
+    "items": [
+      {"id": "approach-1", "name": "Redis Cluster", "confidence": 0.82},
+      {"id": "approach-7", "name": "Hybrid multi-tier", "confidence": 0.78},
+      {"id": "approach-2", "name": "CDN Edge Caching", "confidence": 0.75},
+      {"id": "approach-5", "name": "Memcached cluster", "confidence": 0.72},
+      {"id": "approach-3", "name": "Application-level cache", "confidence": 0.70}
+    ],
+    "confidence_scores": {
+      "approach-1": 0.82,
+      "approach-7": 0.78,
+      "approach-2": 0.75,
+      "approach-5": 0.72,
+      "approach-3": 0.70
+    }
+  },
+
+  "evidence_chain": {
+    "sources_used": ["System requirements doc", "Current traffic patterns", "Competitor analysis"],
+    "key_findings": [
+      "Redis dominates e-commerce caching space",
+      "Multi-tier caching provides best latency profile",
+      "CDN effective but limited to static assets"
+    ],
+    "reference_paths": []
+  },
+
+  "recommendations": {
+    "focus_areas": ["Evaluate top 3 approaches against latency requirements", "Consider hybrid approach combining Redis + local cache"],
+    "avoid_areas": ["Custom implementations", "Blockchain-based solutions"],
+    "open_questions": ["What is the cache invalidation strategy?", "What consistency model is acceptable?"]
+  },
+
+  "bot_specific": {
+    "exploration_summary": {
+      "level_0_approaches": 8,
+      "level_1_subapproaches": 0,
+      "total_explored": 8,
+      "retained_above_40pct": 6
+    },
+    "approach_registry": [
+      {
+        "id": "approach-1",
+        "name": "Redis Cluster",
+        "level": 0,
+        "confidence": 0.82,
+        "status": "retained",
+        "strengths": ["Mature ecosystem", "Persistence options", "Rich data structures"],
+        "weaknesses": ["Memory cost", "Single-threaded per node"],
+        "best_for": "General-purpose distributed caching"
+      }
+    ],
+    "pruned_approaches": [
+      {"id": "approach-6", "name": "Blockchain-based cache", "pruned_reason": "Completely unsuitable for caching use case, confidence 12%", "pruned_at": "level-0"},
+      {"id": "approach-8", "name": "Custom shared memory", "pruned_reason": "High risk and maintenance burden, confidence 25%", "pruned_at": "level-0"}
+    ],
+    "top_5_viable": ["approach-1", "approach-7", "approach-2", "approach-5", "approach-3"],
+    "handover_recommendation": {
+      "to_tot": "Evaluate top 3 approaches (Redis, Hybrid, CDN) against latency and availability criteria",
+      "to_he": "Not applicable - this is a design problem, not diagnosis",
+      "to_ar": "After ToT selects best approach, validate against adversarial scenarios"
+    }
+  },
+
+  "confidence_transfer": {
+    "source_confidence": {
+      "pattern": "BoT",
+      "score": 0.78,
+      "basis": "6 of 8 approaches retained above 40% threshold, high-quality top candidates identified"
+    },
+    "transfer_adjustments": {
+      "scope_change": -0.03,
+      "information_loss": -0.02,
+      "pattern_alignment": 0.02
+    },
+    "target_starting_confidence": {
+      "pattern": "ToT",
+      "score": 0.75,
+      "rationale": "Starting ToT with pre-filtered approaches from BoT exploration"
+    },
+    "shared_assumption_discount": {
+      "applied": true,
+      "discount": -0.05,
+      "reason": "Same LLM, same problem framing, potential shared blind spots"
+    }
+  },
+
+  "metadata": {
+    "duration_minutes": 30,
+    "branches_explored": 8,
+    "branches_retained": 6,
+    "confidence_at_handover": 0.78
+  }
+}

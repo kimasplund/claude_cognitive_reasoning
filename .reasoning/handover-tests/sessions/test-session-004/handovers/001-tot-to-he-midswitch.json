@@ -1,0 +1,96 @@
+{
+  "$schema": "reasoning-handover-v1",
+  "handover_id": "001-tot-to-he-midswitch",
+  "timestamp": "2026-01-18T12:15:00Z",
+  "handover_type": "mid_session_switch",
+  "reason": "Problem reframing - optimization to diagnosis",
+
+  "source_pattern": {
+    "name": "ToT",
+    "version": "1.0",
+    "session_state_path": "./pattern-state/tot/state.json",
+    "completion_status": "partial",
+    "phases_completed": ["step-1-decomposition", "step-2-branching"],
+    "phases_incomplete": ["step-3-evaluation", "step-4-recursive-depth", "step-5-synthesis"]
+  },
+
+  "target_pattern": {
+    "name": "HE",
+    "version": "2.0",
+    "recommended_entry_point": "phase-1-hypothesis-generation"
+  },
+
+  "context_transfer": {
+    "problem_understanding": "System performance degraded after deployment - need to find root cause",
+    "problem_reframing": {
+      "original": "How to optimize system performance",
+      "new": "What caused performance degradation",
+      "rationale": "Multiple changes deployed simultaneously - need diagnosis before optimization"
+    },
+    "constraints_identified": ["Production system", "Cannot rollback without knowing cause", "Business impact ongoing"],
+    "assumptions_made": ["Degradation is caused by deployment (not external factors)", "Logs and metrics available"]
+  },
+
+  "deliverables": {
+    "type": "partial_exploration",
+    "items": [
+      {"id": "observation-1", "content": "DB load is high (from caching analysis)"},
+      {"id": "observation-2", "content": "Instances not CPU-bound (from scaling analysis)"},
+      {"id": "observation-3", "content": "Recent schema changes detected (from query analysis)"}
+    ]
+  },
+
+  "evidence_chain": {
+    "sources_used": ["ToT branch explorations"],
+    "key_findings": [
+      "High DB load suggests database-related issue",
+      "CPU not saturated rules out compute bottleneck",
+      "Schema changes are prime suspect"
+    ],
+    "reference_paths": ["./pattern-state/tot/state.json"]
+  },
+
+  "recommendations": {
+    "suggested_hypotheses": [
+      "H1: Schema change caused missing index",
+      "H2: New feature increased query complexity",
+      "H3: Connection pool sizing changed",
+      "H4: ORM upgrade changed query patterns"
+    ],
+    "focus_areas": ["Database-related changes", "Query patterns"],
+    "avoid_areas": ["CPU optimization", "Memory tuning (not indicated)"],
+    "open_questions": ["What exactly changed in the deployment?", "When did degradation start relative to deployment?"]
+  },
+
+  "tot_partial_work": {
+    "branches_explored": 3,
+    "branches_useful_for_he": 3,
+    "insights_transferable": true,
+    "work_preserved_percentage": 85
+  },
+
+  "confidence_transfer": {
+    "source_confidence": {
+      "pattern": "ToT",
+      "score": 0.45,
+      "basis": "Partial exploration, problem was misframed"
+    },
+    "transfer_adjustments": {
+      "problem_reframing_bonus": 0.10,
+      "partial_work_value": 0.05,
+      "uncertainty_from_switch": -0.05
+    },
+    "target_starting_confidence": {
+      "pattern": "HE",
+      "score": 0.55,
+      "rationale": "Reframing likely correct, ToT observations provide hypothesis seeds"
+    }
+  },
+
+  "metadata": {
+    "duration_minutes": 15,
+    "handover_type": "mid_session_switch",
+    "work_preserved": true,
+    "confidence_at_handover": 0.45
+  }
+}

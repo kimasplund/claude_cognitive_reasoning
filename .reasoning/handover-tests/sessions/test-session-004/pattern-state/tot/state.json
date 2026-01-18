@@ -1,0 +1,80 @@
+{
+  "pattern": "ToT",
+  "version": "1.0",
+  "started_at": "2026-01-18T12:00:00Z",
+  "current_phase": "step-3-evaluation",
+  "status": "abandoned_mid_session",
+  "abandonment_reason": "Problem reframed as diagnosis, not optimization",
+
+  "original_problem": "System performance degraded after deployment",
+  "initial_framing": "Optimization problem - find best performance tuning approach",
+
+  "tree": {
+    "root": {
+      "problem": "Optimize system performance post-deployment",
+      "evaluation_criteria": ["latency", "throughput", "resource_usage"]
+    },
+    "levels": [
+      {
+        "level": 0,
+        "branches": [
+          {
+            "id": "branch-1",
+            "name": "Add caching layer",
+            "analysis": "Add Redis to reduce DB load",
+            "scores": {"total": 72},
+            "status": "explored",
+            "selected_for_depth": false
+          },
+          {
+            "id": "branch-2",
+            "name": "Scale horizontally",
+            "analysis": "Add more instances behind load balancer",
+            "scores": {"total": 68},
+            "status": "explored",
+            "selected_for_depth": false
+          },
+          {
+            "id": "branch-3",
+            "name": "Optimize database queries",
+            "analysis": "Index tuning and query optimization",
+            "scores": {"total": 75},
+            "status": "explored",
+            "selected_for_depth": true
+          }
+        ],
+        "winner": "branch-3",
+        "winner_score": 75
+      }
+    ],
+    "current_level": 0
+  },
+
+  "realization_point": {
+    "trigger": "During branch-3 analysis, noticed deployment changed multiple things simultaneously",
+    "insight": "This is not an optimization problem - we need to diagnose WHY performance degraded, not how to optimize",
+    "new_framing": "Root cause diagnosis: What change caused the degradation?",
+    "decision": "Switch to HE (Hypothesis-Elimination) pattern"
+  },
+
+  "partial_work_to_preserve": {
+    "approaches_explored": ["caching", "scaling", "query_optimization"],
+    "useful_observations": [
+      "Caching analysis revealed DB load is high",
+      "Scaling analysis showed instances are not CPU-bound",
+      "Query optimization analysis found recent schema changes"
+    ],
+    "potential_hypotheses_for_he": [
+      "Schema change caused missing index",
+      "New feature increased query complexity",
+      "Connection pool sizing changed",
+      "ORM upgrade changed query patterns"
+    ]
+  },
+
+  "exploration_stats": {
+    "total_branches_explored": 3,
+    "total_time_minutes": 15,
+    "work_wasted": "Minimal - insights transfer to HE"
+  }
+}

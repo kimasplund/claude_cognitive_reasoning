@@ -1,0 +1,116 @@
+{
+  "$schema": "reasoning-handover-v1",
+  "handover_id": "002-tot-to-ar",
+  "timestamp": "2026-01-18T10:55:00Z",
+  "chain_position": 2,
+  "chain_history": ["BoT", "ToT"],
+
+  "source_pattern": {
+    "name": "ToT",
+    "version": "1.0",
+    "session_state_path": "./pattern-state/tot/state.json"
+  },
+
+  "target_pattern": {
+    "name": "AR",
+    "version": "1.0",
+    "recommended_entry_point": "step-1-threat-modeling"
+  },
+
+  "context_transfer": {
+    "problem_understanding": "Design caching system for e-commerce platform - now validating optimal solution",
+    "constraints_identified": ["99.9% availability", "<50ms latency", "1M concurrent users"],
+    "assumptions_made": ["Three-tier caching is optimal", "CDN + Caffeine + Redis combination achieves goals"],
+    "chain_context": {
+      "original_problem_from_bot": "Identify all viable caching architectures",
+      "bot_contribution": "Explored 8 approaches, retained 6, top 5 ranked",
+      "tot_contribution": "Narrowed to 3-tier architecture (CDN + Caffeine + Redis), score 89/100"
+    }
+  },
+
+  "deliverables": {
+    "type": "solution",
+    "items": [
+      {
+        "id": "solution-1",
+        "name": "Three-tier caching architecture",
+        "description": "CDN (L0) + Caffeine (L1) + Redis Cluster (L2)",
+        "path": "branch-2 > branch-2.3",
+        "score": 89,
+        "confidence": 0.88
+      }
+    ],
+    "confidence_scores": {
+      "solution-1": 0.88
+    }
+  },
+
+  "tot_specific": {
+    "tree_structure": {
+      "total_levels": 2,
+      "branches_per_level": [3, 3],
+      "winning_path": ["branch-2", "branch-2.3"]
+    },
+    "branch_scores": {
+      "branch-2.3": {
+        "novelty": 17,
+        "feasibility": 18,
+        "completeness": 18,
+        "confidence": 18,
+        "alignment": 18,
+        "total": 89
+      }
+    },
+    "winning_solution": {
+      "path": "L0:Hybrid > L1:Three-tier",
+      "final_score": 89,
+      "confidence": 0.88,
+      "key_insight": "Three-tier provides optimal latency profile with redundancy"
+    },
+    "alternatives_considered": [
+      {
+        "path": "branch-1",
+        "final_score": 83,
+        "why_not_selected": "Pure Redis lacks local cache benefits"
+      }
+    ],
+    "handover_recommendation": {
+      "to_ar": "Validate three-tier architecture against cache poisoning, thundering herd, and availability scenarios"
+    }
+  },
+
+  "confidence_transfer": {
+    "source_confidence": {
+      "pattern": "ToT",
+      "score": 0.88,
+      "basis": "High-scoring winning path, alternatives evaluated, clear winner"
+    },
+    "cumulative_chain_discount": {
+      "applied": true,
+      "previous_discounts": [
+        {"handover": "BoT->ToT", "discount": -0.05}
+      ],
+      "current_discount": -0.05,
+      "total_cumulative_discount": -0.10,
+      "rationale": "Two handovers in chain, each introduces potential information loss and shared assumptions"
+    },
+    "transfer_adjustments": {
+      "scope_change": -0.02,
+      "information_loss": -0.02,
+      "pattern_alignment": 0.03
+    },
+    "target_starting_confidence": {
+      "pattern": "AR",
+      "score": 0.77,
+      "rationale": "Starting AR with 0.88 - 0.10 (chain discount) - 0.01 (adjustments) = 0.77"
+    }
+  },
+
+  "metadata": {
+    "duration_minutes": 25,
+    "branches_explored": 6,
+    "branches_retained": 1,
+    "confidence_at_handover": 0.88,
+    "chain_length": 2
+  }
+}

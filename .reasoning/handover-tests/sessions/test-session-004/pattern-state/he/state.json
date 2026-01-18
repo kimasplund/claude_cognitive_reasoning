@@ -1,0 +1,84 @@
+{
+  "pattern": "HE",
+  "version": "2.0",
+  "started_at": "2026-01-18T12:15:00Z",
+  "current_phase": "phase-2-evidence-gathering",
+  "loaded_from_handover": "001-tot-to-he-midswitch.json",
+
+  "symptom": "System performance degraded after deployment",
+
+  "hypotheses_from_tot_insights": [
+    {
+      "id": "H1",
+      "name": "Schema change caused missing index",
+      "mechanism": "New table structure lacks index on frequently-queried column",
+      "initial_probability": 0.35,
+      "current_probability": 0.35,
+      "status": "active",
+      "source": "ToT branch-3 analysis"
+    },
+    {
+      "id": "H2",
+      "name": "New feature increased query complexity",
+      "mechanism": "Feature adds JOINs that weren't optimized",
+      "initial_probability": 0.25,
+      "current_probability": 0.25,
+      "status": "active",
+      "source": "ToT branch-3 analysis"
+    },
+    {
+      "id": "H3",
+      "name": "Connection pool sizing changed",
+      "mechanism": "Pool too small for load, causing connection queuing",
+      "initial_probability": 0.15,
+      "current_probability": 0.15,
+      "status": "active",
+      "source": "ToT branch-2 observation"
+    },
+    {
+      "id": "H4",
+      "name": "ORM upgrade changed query patterns",
+      "mechanism": "ORM generates different SQL, may be less efficient",
+      "initial_probability": 0.20,
+      "current_probability": 0.20,
+      "status": "active",
+      "source": "General knowledge, seeded by ToT reframing"
+    }
+  ],
+
+  "tot_context_preserved": {
+    "observations_used": [
+      "DB load is high (validated H1, H2)",
+      "CPU not saturated (rules out compute issues)",
+      "Schema changes detected (strengthens H1)"
+    ],
+    "work_not_wasted": true,
+    "confidence_boost_from_tot": 0.10
+  },
+
+  "evidence_hierarchy": [
+    {
+      "id": "E001",
+      "source": "Deployment changelog",
+      "discrimination_power": 5,
+      "acquisition_cost": 1,
+      "priority_score": 5.0,
+      "status": "pending"
+    },
+    {
+      "id": "E002",
+      "source": "Query execution plans",
+      "discrimination_power": 4,
+      "acquisition_cost": 2,
+      "priority_score": 2.0,
+      "status": "pending"
+    }
+  ],
+
+  "handover_verification": {
+    "context_preserved": true,
+    "hypotheses_seeded_from_tot": 4,
+    "observations_transferred": 3,
+    "partial_work_value_realized": true
+  }
+}

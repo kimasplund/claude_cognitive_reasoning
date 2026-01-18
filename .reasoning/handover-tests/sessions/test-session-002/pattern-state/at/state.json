@@ -1,0 +1,40 @@
+{
+  "pattern": "AT",
+  "version": "1.0",
+  "started_at": "2026-01-18T11:00:00Z",
+  "current_phase": "completed",
+  "parallel_branch": true,
+  "branch_id": "at-parallel-001",
+
+  "analogy_search": {
+    "target_domain": "Real-time analytics pipeline",
+    "source_domains_explored": [
+      "Stock trading systems",
+      "Manufacturing assembly lines",
+      "Nervous system signal processing",
+      "Newspaper publishing workflow"
+    ]
+  },
+
+  "best_analogy": {
+    "source_domain": "Stock trading systems",
+    "mapping": {
+      "data_events": "trade_orders",
+      "stream_processing": "order_matching_engine",
+      "state_management": "position_tracking",
+      "event_log": "trade_ledger"
+    },
+    "insight": "Stock exchanges use event-driven architecture with immutable logs - exactly what we need for analytics",
+    "transferred_patterns": [
+      "Event sourcing for audit trail",
+      "In-memory state machines",
+      "Partitioned processing for throughput"
+    ]
+  },
+
+  "conclusion": {
+    "recommendation": "Event-driven architecture with Kafka event sourcing",
+    "confidence": 0.78,
+    "rationale": "Stock exchange analogy validates event sourcing pattern for real-time, high-throughput scenarios"
+  }
+}

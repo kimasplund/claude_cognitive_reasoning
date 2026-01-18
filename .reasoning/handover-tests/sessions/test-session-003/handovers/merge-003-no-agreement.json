@@ -1,0 +1,102 @@
+{
+  "$schema": "parallel-merge-v1",
+  "merge_id": "merge-003-no-agreement",
+  "timestamp": "2026-01-18T13:30:00Z",
+  "merge_type": "parallel_branches",
+  "test_scenario": "NO_AGREEMENT_CONFLICTING_CONCLUSIONS",
+
+  "branches": [
+    {
+      "pattern": "BoT",
+      "branch_id": "bot-003",
+      "conclusion": "Monolithic architecture is best for this use case",
+      "confidence": 0.72,
+      "key_insight": "Simpler deployment, lower operational overhead",
+      "supporting_evidence": [
+        "Team size < 10",
+        "Single deployment target",
+        "Low complexity domain"
+      ]
+    },
+    {
+      "pattern": "AT",
+      "branch_id": "at-003",
+      "conclusion": "Microservices architecture is best for this use case",
+      "confidence": 0.68,
+      "key_insight": "Netflix analogy - microservices scale better",
+      "supporting_evidence": [
+        "Growth projections suggest scale",
+        "Multiple teams expected",
+        "Independent deployability valuable"
+      ]
+    }
+  ],
+
+  "agreement_analysis": {
+    "type": "NO_AGREEMENT",
+    "methodology": "Semantic comparison with contradiction detection",
+    "branch_A_conclusion": "Monolithic architecture",
+    "branch_B_conclusion": "Microservices architecture",
+    "contradiction": {
+      "detected": true,
+      "nature": "Mutually exclusive architectural choices",
+      "cannot_both_be_true": true
+    },
+    "disagreement_analysis": {
+      "root_cause": "Different time horizons and assumptions",
+      "bot_assumption": "Optimize for current state (small team, simple domain)",
+      "at_assumption": "Optimize for future state (scale, multiple teams)"
+    }
+  },
+
+  "confidence_handling": {
+    "formula_applied": "min(branch_confidences) - 0.10",
+    "calculation": "min(0.72, 0.68) - 0.10 = 0.58",
+    "merged_confidence": 0.58,
+    "confidence_severely_reduced": true,
+    "rationale": "Conflicting expert opinions means high uncertainty"
+  },
+
+  "merged_result": {
+    "conclusion": "NO CLEAR RECOMMENDATION - Architecture choice requires clarification of time horizon and growth assumptions",
+    "confidence": 0.58,
+    "synthesis": "BoT recommends monolith (current state optimization), AT recommends microservices (future state optimization). These are mutually exclusive choices. The disagreement stems from different assumptions about time horizon and growth expectations.",
+    "actionable_output": "Cannot proceed without stakeholder input on priorities",
+    "requires_human_decision": true
+  },
+
+  "conflict_resolution_options": [
+    {
+      "option": "A",
+      "approach": "Seek stakeholder clarification",
+      "question": "Should we optimize for current simplicity or future scalability?",
+      "expected_resolution": "Clarified requirements break the tie"
+    },
+    {
+      "option": "B",
+      "approach": "Run DR (Dialectical Reasoning)",
+      "question": "Can we synthesize a middle ground?",
+      "expected_resolution": "Modular monolith as synthesis"
+    },
+    {
+      "option": "C",
+      "approach": "Defer decision",
+      "question": "Can we start simple and evolve?",
+      "expected_resolution": "Start monolith, plan microservices migration path"
+    }
+  ],
+
+  "merge_verification": {
+    "branches_complete": true,
+    "conclusions_compatible": false,
+    "confidence_aggregation_valid": true,
+    "synthesis_coherent": true,
+    "requires_further_analysis": true,
+    "human_decision_required": true
+  },
+
+  "next_step": {
+    "pattern": "NDF",
+    "rationale": "Conflicting conclusions require stakeholder negotiation to resolve"
+  }
+}

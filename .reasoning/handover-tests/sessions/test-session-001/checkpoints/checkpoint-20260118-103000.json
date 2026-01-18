@@ -1,0 +1,55 @@
+{
+  "$schema": "checkpoint-v1",
+  "checkpoint_id": "checkpoint-20260118-103000",
+  "created_at": "2026-01-18T10:30:00Z",
+  "trigger": "scheduled",
+  "iteration": 2,
+
+  "session_state": {
+    "session_id": "20260118-100000-test001a",
+    "active_pattern": "ToT",
+    "pattern_phase": "step-3-evaluation",
+    "elapsed_minutes": 30,
+    "patterns_completed": ["BoT"],
+    "patterns_pending": ["AR"]
+  },
+
+  "pattern_snapshot": {
+    "pattern": "ToT",
+    "current_level": 1,
+    "branches_at_current_level": 3,
+    "winning_branch_so_far": "branch-2",
+    "confidence_so_far": 0.82,
+    "work_remaining": "Complete level 1 evaluation, proceed to level 2 if needed",
+    "tree_state": {
+      "levels_completed": [0],
+      "level_0_winner": "branch-2",
+      "level_0_winner_score": 86,
+      "branches_explored": ["branch-1", "branch-2", "branch-3", "branch-2.1", "branch-2.2", "branch-2.3"]
+    }
+  },
+
+  "evidence_snapshot": {
+    "evidence_count": 0,
+    "evidence_index_path": "./evidence/index.json",
+    "key_evidence": []
+  },
+
+  "recovery_instructions": {
+    "to_resume": [
+      "1. Load manifest from ./manifest.json",
+      "2. Restore ToT state from ./pattern-state/tot/state.json",
+      "3. Resume at Level 1, evaluating branch-2.1, branch-2.2, branch-2.3",
+      "4. Continue ToT methodology step 3 (evaluation) and step 4 (recursive depth)",
+      "5. Upon ToT completion, handover to AR pattern"
+    ],
+    "expected_time_to_complete": "25-35 minutes",
+    "dependencies": "None - can resume independently"
+  },
+
+  "integrity_check": {
+    "manifest_hash": "sha256:abc123def456...",
+    "pattern_state_hash": "sha256:789ghi012jkl...",
+    "evidence_hash": "sha256:mno345pqr678..."
+  }
+}

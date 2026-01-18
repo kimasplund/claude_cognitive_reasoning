@@ -1,0 +1,207 @@
+{
+  "$schema": "reasoning-handover-v1",
+  "handover_id": "002-he-to-tot",
+  "timestamp": "2026-01-18T12:35:00Z",
+
+  "source_pattern": {
+    "name": "HE",
+    "version": "2.0",
+    "session_state_path": "./pattern-state/he/state.json"
+  },
+
+  "target_pattern": {
+    "name": "ToT",
+    "version": "1.0",
+    "recommended_entry_point": "step-2-branch-generation"
+  },
+
+  "context_transfer": {
+    "problem_understanding": "API latency caused by external Payment Gateway API degradation. Payment API P50 latency increased from 45ms to 850ms over past week. Root cause confirmed with prediction test.",
+    "constraints_identified": [
+      "Cannot change payment gateway vendor (contract)",
+      "Must maintain payment functionality",
+      "Production system - minimize risk",
+      "Target: return to <200ms response time"
+    ],
+    "assumptions_made": [
+      "Payment gateway degradation is on their end (not our integration)",
+      "Payment gateway vendor has been notified",
+      "We have control over timeout and retry logic"
+    ]
+  },
+
+  "deliverables": {
+    "type": "root_cause",
+    "items": [
+      {
+        "hypothesis": "H3",
+        "name": "External Payment Gateway API slowdown",
+        "status": "CONFIRMED",
+        "confidence": 0.85,
+        "mechanism": "Payment gateway P50 latency increased from 45ms to 850ms. HTTP connection pool to payment API saturated at 100/100. Request queuing causes cascading latency.",
+        "evidence_ids": ["E3", "E4"]
+      }
+    ],
+    "eliminated_hypotheses": [
+      {"id": "H1", "name": "Database query degradation", "evidence": "E1"},
+      {"id": "H2", "name": "Memory leak", "evidence": "E2"},
+      {"id": "H4", "name": "Connection pool exhaustion", "evidence": "Symptom of H3"},
+      {"id": "H5", "name": "Cache hit ratio decline", "evidence": "E5"},
+      {"id": "H6", "name": "Network saturation", "evidence": "E3"},
+      {"id": "H7", "name": "Disk I/O bottleneck", "evidence": "E1"},
+      {"id": "H8", "name": "DNS resolution delays", "evidence": "E3"},
+      {"id": "H9", "name": "SSL/TLS issues", "evidence": "E3"}
+    ],
+    "confidence_scores": {
+      "root_cause_accuracy": 0.85,
+      "mechanism_understanding": 0.90
+    }
+  },
+
+  "evidence_chain": {
+    "sources_used": [
+      "APM slow query report",
+      "Memory metrics (7-day trend)",
+      "External API latency dashboard",
+      "Connection pool statistics",
+      "Cache hit ratio metrics"
+    ],
+    "key_findings": [
+      "Payment Gateway API P50: 45ms -> 850ms (19x increase)",
+      "Payment Gateway API P99: 120ms -> 2100ms (17.5x increase)",
+      "Other external APIs (Auth, Search) stable",
+      "HTTP client pool to Payment API: 100/100 (saturated)",
+      "Shadow mode test: 180ms without payment vs 1900ms with payment"
+    ],
+    "reference_paths": [
+      "./evidence/gathered/E1-apm-queries.json",
+      "./evidence/gathered/E2-memory-metrics.json",
+      "./evidence/gathered/E3-external-api-latency.json",
+      "./evidence/gathered/E4-connection-pools.json",
+      "./evidence/gathered/E5-cache-metrics.json"
+    ]
+  },
+
+  "recommendations": {
+    "focus_areas": [
+      "Timeout configuration for payment API calls",
+      "Circuit breaker implementation",
+      "Async payment processing architecture",
+      "Fallback behavior design"
+    ],
+    "avoid_areas": [
+      "Caching payment responses (not cacheable)",
+      "Retry with backoff (makes latency worse)",
+      "Database optimizations (not the issue)",
+      "Memory tuning (not the issue)"
+    ],
+    "open_questions": [
+      "What fallback behavior is acceptable when payment API is slow?",
+      "Can payments be processed asynchronously?",
+      "What is acceptable timeout before failing fast?"
+    ],
+    "evaluation_criteria": [
+      "Effectiveness at reducing latency impact",
+      "Implementation speed (can deploy today?)",
+      "Risk to payment functionality",
+      "Long-term maintainability"
+    ]
+  },
+
+  "he_specific": {
+    "hypothesis_registry": [
+      {
+        "id": "H1",
+        "name": "Database query degradation",
+        "initial_probability": 0.25,
+        "final_probability": 0.02,
+        "status": "eliminated",
+        "eliminated_by": "E1"
+      },
+      {
+        "id": "H2",
+        "name": "Memory leak in application",
+        "initial_probability": 0.15,
+        "final_probability": 0.02,
+        "status": "eliminated",
+        "eliminated_by": "E2"
+      },
+      {
+        "id": "H3",
+        "name": "External Payment Gateway API slowdown",
+        "initial_probability": 0.20,
+        "final_probability": 0.85,
+        "status": "confirmed",
+        "confirmed_by": ["E3", "E4", "shadow_test"]
+      },
+      {
+        "id": "H4",
+        "name": "Connection pool exhaustion",
+        "initial_probability": 0.15,
+        "final_probability": 0.10,
+        "status": "secondary_symptom",
+        "note": "Symptom of H3, not root cause"
+      },
+      {
+        "id": "H5",
+        "name": "Cache hit ratio decline",
+        "initial_probability": 0.10,
+        "final_probability": 0.01,
+        "status": "eliminated",
+        "eliminated_by": "E5"
+      }
+    ],
+    "elimination_path": {
+      "started_with": 9,
+      "remaining": 1,
+      "elimination_sequence": ["H1", "H2", "H5", "H6", "H7", "H8", "H9", "H4(reclassified)"]
+    },
+    "confirmation_test": {
+      "prediction": "Bypassing payment calls should restore normal latency",
+      "test": "Shadow mode routing (5% traffic)",
+      "result": "Shadow: 180ms, Normal: 1900ms",
+      "conclusion": "Prediction confirmed"
+    },
+    "root_cause": {
+      "hypothesis": "H3",
+      "confidence": 0.85,
+      "mechanism": "External payment API degradation causing request queuing and cascading latency",
+      "prevention_advice": "Implement timeout and circuit breaker patterns for all external dependencies"
+    },
+    "handover_recommendation": {
+      "to_tot": "Evaluate mitigation options for external API dependency. Focus on: timeout reduction, circuit breaker, async processing. Avoid: caching (not applicable), retries (makes worse)."
+    }
+  },
+
+  "metadata": {
+    "duration_minutes": 25,
+    "hypotheses_generated": 9,
+    "hypotheses_eliminated": 8,
+    "evidence_gathered": 5,
+    "confidence_at_handover": 0.85
+  },
+
+  "confidence_transfer": {
+    "source_confidence": {
+      "pattern": "HE",
+      "score": 0.85,
+      "basis": "Root cause confirmed with prediction test, strong evidence chain, 8/9 hypotheses eliminated"
+    },
+    "transfer_adjustments": {
+      "scope_change": -0.03,
+      "information_loss": -0.02,
+      "pattern_alignment": 0.05
+    },
+    "target_starting_confidence": {
+      "pattern": "ToT",
+      "score": 0.85,
+      "rationale": "Strong handover with clear problem definition. ToT starting with well-defined problem space."
+    },
+    "shared_assumption_discount": {
+      "applied": true,
+      "discount": -0.05,
+      "reason": "Same LLM, same problem framing, potential shared blind spots"
+    },
+    "final_starting_confidence": 0.80
+  }
+}

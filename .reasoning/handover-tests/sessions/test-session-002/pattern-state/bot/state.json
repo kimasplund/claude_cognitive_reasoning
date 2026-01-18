@@ -1,0 +1,33 @@
+{
+  "pattern": "BoT",
+  "version": "1.0",
+  "started_at": "2026-01-18T11:00:00Z",
+  "current_phase": "completed",
+  "parallel_branch": true,
+  "branch_id": "bot-parallel-001",
+
+  "exploration": {
+    "problem": "Design real-time data pipeline for analytics",
+    "level_0": {
+      "approaches_generated": 8,
+      "approaches": [
+        {"id": "approach-1", "name": "Kafka + Flink", "confidence": 85, "status": "retained"},
+        {"id": "approach-2", "name": "Kinesis + Lambda", "confidence": 72, "status": "retained"},
+        {"id": "approach-3", "name": "Pulsar + Spark", "confidence": 68, "status": "retained"},
+        {"id": "approach-4", "name": "Event sourcing with Kafka", "confidence": 82, "status": "retained"},
+        {"id": "approach-5", "name": "Change Data Capture", "confidence": 70, "status": "retained"},
+        {"id": "approach-6", "name": "Batch ETL", "confidence": 45, "status": "retained"},
+        {"id": "approach-7", "name": "Custom socket streaming", "confidence": 30, "status": "pruned"},
+        {"id": "approach-8", "name": "Blockchain ledger", "confidence": 15, "status": "pruned"}
+      ],
+      "retained": 6
+    }
+  },
+
+  "conclusion": {
+    "recommendation": "Kafka + Flink streaming architecture",
+    "top_approach": "approach-1",
+    "confidence": 0.85,
+    "rationale": "Highest confidence, proven at scale, strong ecosystem"
+  }
+}

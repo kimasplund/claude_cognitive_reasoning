@@ -1,0 +1,154 @@
+{
+  "$schema": "reasoning-handover-v1",
+  "handover_id": "001-rtr-to-he",
+  "timestamp": "2026-01-18T12:10:00Z",
+
+  "source_pattern": {
+    "name": "RTR",
+    "version": "1.0",
+    "session_state_path": "./pattern-state/rtr/state.json"
+  },
+
+  "target_pattern": {
+    "name": "HE",
+    "version": "2.0",
+    "recommended_entry_point": "step-H-hypothesis-generation"
+  },
+
+  "context_transfer": {
+    "problem_understanding": "API response times degraded from 200ms to 2000ms over past week. Users complaining. Gradual degradation pattern, not sudden spike.",
+    "constraints_identified": [
+      "Production system - cannot take offline",
+      "No recent deployments in 7-day window",
+      "Users actively complaining - urgency required"
+    ],
+    "assumptions_made": [
+      "Monitoring data is accurate",
+      "7-day timeline is correct based on user reports",
+      "Scaling up is safe (no auto-scaling limits hit)"
+    ]
+  },
+
+  "deliverables": {
+    "type": "triage_assessment",
+    "items": [
+      {
+        "assessment": "severity",
+        "value": "HIGH",
+        "rationale": "Service degraded but not down, significant user impact"
+      },
+      {
+        "assessment": "immediate_action",
+        "value": "Scaled instances 4->8",
+        "result": "Partial improvement (2000ms -> 800ms), indicates NOT pure load issue"
+      },
+      {
+        "assessment": "eliminated_category",
+        "value": "Pure load/capacity issue",
+        "rationale": "Scaling helped but didn't solve, so root cause is not purely load-related"
+      }
+    ],
+    "confidence_scores": {
+      "triage_accuracy": 0.85,
+      "hypothesis_direction": 0.65
+    }
+  },
+
+  "evidence_chain": {
+    "sources_used": [
+      "User reports (timing)",
+      "Deployment logs (no recent deploys)",
+      "Auto-scaler metrics (before/after)"
+    ],
+    "key_findings": [
+      "Degradation is gradual over 7 days, not sudden",
+      "Scaling provides partial relief but doesn't solve",
+      "No deployments in affected timeframe"
+    ],
+    "reference_paths": []
+  },
+
+  "recommendations": {
+    "focus_areas": [
+      "Database performance (query degradation, connection pools)",
+      "External dependencies (payment, auth, third-party APIs)",
+      "Caching layer (hit ratio decline, evictions)",
+      "Memory/resource leaks"
+    ],
+    "avoid_areas": [
+      "Pure capacity/load investigation (already scaled, didn't solve)",
+      "Recent code changes (no deploys in timeframe)"
+    ],
+    "open_questions": [
+      "Which specific component is causing latency?",
+      "Is degradation on read path, write path, or both?",
+      "Are all endpoints equally affected?"
+    ],
+    "hypothesis_seeds": [
+      "External API dependency degradation",
+      "Database query regression",
+      "Connection pool exhaustion",
+      "Memory leak causing GC pressure"
+    ]
+  },
+
+  "rtr_specific": {
+    "rapid_framework_completed": {
+      "R_recognize": true,
+      "A_assess_options": true,
+      "P_pick_good_enough": true,
+      "I_implement_fast": true,
+      "D_document_handoff": true
+    },
+    "immediate_actions_taken": [
+      {
+        "action": "Scale up instances",
+        "from": 4,
+        "to": 8,
+        "time": "12:04:00",
+        "result": "Response time improved from 2000ms to 800ms"
+      }
+    ],
+    "stabilization_status": {
+      "service_up": true,
+      "partial_improvement": true,
+      "root_cause_found": false
+    },
+    "time_pressure_remaining": 4,
+    "handover_recommendation": {
+      "to_he": "Generate 8-15 hypotheses focusing on external dependencies, database, and resource leaks. Scaling-related hypotheses can be deprioritized.",
+      "urgency": "Continue investigation while scaled-up state buys time"
+    }
+  },
+
+  "metadata": {
+    "duration_minutes": 10,
+    "actions_taken": 1,
+    "hypotheses_seeded": 4,
+    "confidence_at_handover": 0.70
+  },
+
+  "confidence_transfer": {
+    "source_confidence": {
+      "pattern": "RTR",
+      "score": 0.70,
+      "basis": "Quick triage completed, partial stabilization achieved, hypothesis direction established"
+    },
+    "transfer_adjustments": {
+      "scope_expansion": 0.00,
+      "information_preservation": -0.02,
+      "pattern_alignment": 0.05
+    },
+    "target_starting_confidence": {
+      "pattern": "HE",
+      "score": 0.73,
+      "rationale": "RTR provided strong hypothesis seeds and eliminated one category; slight boost for pattern alignment"
+    },
+    "shared_assumption_discount": {
+      "applied": true,
+      "discount": -0.05,
+      "reason": "Same LLM, same problem framing, potential shared blind spots"
+    },
+    "final_starting_confidence": 0.68
+  }
+}

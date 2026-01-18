@@ -125,6 +125,137 @@ Apply -5% to final confidence for each uncertain dimension that affects the winn
 | All patterns <3.0 | Problem may need decomposition first |
 | Top pattern <2.5 | None fit well; use Direct Analysis |
 
+### Direct Analysis (10th Pattern)
+
+When all pattern scores are below 2.5, no specialized methodology is warranted:
+
+```markdown
+## Direct Analysis
+
+**When to use**: All patterns score <2.5 (problem doesn't match any pattern's strengths)
+
+**Approach**:
+1. No special framework needed
+2. Just think through the problem directly, step by step
+3. Use common sense and straightforward reasoning
+4. Appropriate for simple problems that don't need cognitive overhead
+
+**Examples**:
+- Simple factual questions
+- Straightforward calculations
+- Basic lookups or translations
+- Problems with obvious solutions
+
+**Confidence**: Use intuitive confidence based on problem clarity
+- Clear problem + clear answer = high confidence
+- Any ambiguity = document it explicitly
+```
+
+### Direct Analysis Threshold
+
+Use Direct Analysis (no specialized pattern) when:
+- MAX(all pattern scores) < 4.0 AND
+- No dimension scored >= 4 AND
+- Problem is not time-critical (TimePressure < 4)
+
+Direct Analysis = simple step-by-step reasoning without framework overhead.
+
+---
+
+## Sequential vs Parallel Execution Decision
+
+### Use SEQUENTIAL when:
+- Pattern B depends on Pattern A's output (e.g., BoT finds options → ToT optimizes)
+- Confidence from A affects what to do in B
+- Evidence from A eliminates need for B
+- One pattern discovers the problem is different than expected
+
+### Use PARALLEL when:
+- Patterns explore independent dimensions
+- No dependency between pattern outputs
+- Need ensemble confidence (run same problem through 2 patterns)
+- Time allows and you want cross-validation
+- Patterns are complementary (e.g., different perspectives on same problem)
+
+### Common Chains (Sequential):
+```
+BoT → ToT → AR     (explore → optimize → validate)
+HE → SRC → AR      (diagnose → trace → validate fix)
+AT → DR → ToT      (analogize → synthesize → optimize)
+RTR → HE → ToT     (triage → root cause → proper fix)
+NDF → ToT → AR     (align stakeholders → optimize → validate)
+DR → NDF → ToT     (resolve concepts → negotiate politics → optimize)
+AT → BoT → ToT     (find analogies → explore adaptations → select best)
+```
+
+### Common Parallel Combinations:
+```
+BoT || AT          (parallel exploration from different angles)
+ToT || DR          (optimize while synthesizing trade-offs)
+HE branches        (test multiple hypotheses simultaneously)
+AR attack vectors  (stress-test from multiple directions at once)
+```
+
+---
+
+## Full Reasoning Chain: Input → Output
+
+Complete end-to-end flow for IR-v2 orchestration:
+
+```
+1. **Problem Input**
+   └─→ Receive problem statement, constraints, and context
+
+2. **Score 11 Dimensions**
+   └─→ Sequential Dependencies, Criteria Clarity, Solution Space Known,
+       Single Answer Needed, Evidence Available, Opposing Valid Views,
+       Problem Novelty, Robustness Required, Solution Exists,
+       Time Pressure, Stakeholder Complexity
+
+3. **Fast-Path Check**
+   └─→ TimePressure = 5? → RTR immediately (skip remaining steps)
+
+4. **Pattern Selection**
+   └─→ IR-v2 calculates affinity scores for all 9 patterns
+   └─→ Apply validation rules (AR needs solution, NDF needs stakeholders)
+
+5. **Direct Analysis Check**
+   └─→ All patterns < 2.5? → Use Direct Analysis (no framework)
+
+6. **Orchestration Decision**
+   └─→ Single pattern > 4.0? → Use that pattern directly
+   └─→ Top 2 within 0.5? → Consider multi-pattern orchestration
+   └─→ Top 3 within 0.3? → Apply uncertainty propagation first
+   └─→ Decide: Sequential or Parallel execution?
+
+7. **Pattern Execution**
+   └─→ Apply selected pattern(s) using their methodologies
+   └─→ Track confidence and key findings
+
+8. **Checkpoint (15 min)**
+   └─→ Progress check, pattern fit check, new information check
+   └─→ Re-evaluate and potentially switch patterns if needed
+
+9. **Handover (if multi-pattern)**
+   └─→ Transfer context via .reasoning/ directory
+   └─→ Preserve insights from completed pattern
+   └─→ Set up next pattern with full context
+
+10. **Synthesis (if multi-pattern)**
+    └─→ Combine findings from all patterns
+    └─→ Resolve conflicts, identify agreements
+
+11. **Confidence Aggregation**
+    └─→ Single pattern: use internal confidence
+    └─→ Multi-pattern: apply agreement analysis
+    └─→ Apply uncertainty discounts if applicable
+
+12. **Output**
+    └─→ Deliver answer with reasoning trail
+    └─→ Document confidence level and key uncertainties
+    └─→ Provide actionable recommendations
+```
+
 ---
 
 ## Multi-Pattern Orchestration
@@ -336,9 +467,12 @@ Use the pattern's internal confidence score (per its methodology).
 ### Agreement Analysis
 
 **FULL AGREEMENT** (same conclusion):
-- Final Confidence = MAX(X, Y, Z) + 5%
-- Cap at 95%
+- Final Confidence = MIN(MAX(X, Y, Z) + 5%, 95%)
 - Rationale: Independent paths converging increases trust
+
+**Confidence Bounds**:
+- Floor: 10% (never report lower confidence)
+- Ceiling: 95% (never report higher confidence)
 
 **PARTIAL AGREEMENT** (2/3 agree):
 - Final Confidence = (AVG of agreeing × 0.7) + (disagreeing × 0.15)

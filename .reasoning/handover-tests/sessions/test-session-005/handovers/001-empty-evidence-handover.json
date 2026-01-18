@@ -1,0 +1,83 @@
+{
+  "$schema": "reasoning-handover-v1",
+  "handover_id": "001-empty-evidence",
+  "timestamp": "2026-01-18T13:00:00Z",
+  "test_scenario": "EMPTY_EVIDENCE_HANDOVER",
+
+  "source_pattern": {
+    "name": "BoT",
+    "version": "1.0"
+  },
+
+  "target_pattern": {
+    "name": "ToT",
+    "version": "1.0"
+  },
+
+  "context_transfer": {
+    "problem_understanding": "Design API rate limiting strategy",
+    "constraints_identified": [],
+    "assumptions_made": []
+  },
+
+  "deliverables": {
+    "type": "approaches",
+    "items": [
+      {"id": "approach-1", "name": "Token bucket", "confidence": 0.70},
+      {"id": "approach-2", "name": "Sliding window", "confidence": 0.65}
+    ],
+    "confidence_scores": {"approach-1": 0.70, "approach-2": 0.65}
+  },
+
+  "evidence_chain": {
+    "sources_used": [],
+    "key_findings": [],
+    "reference_paths": []
+  },
+
+  "recommendations": {
+    "focus_areas": [],
+    "avoid_areas": [],
+    "open_questions": []
+  },
+
+  "empty_evidence_analysis": {
+    "evidence_count": 0,
+    "is_valid_handover": true,
+    "rationale": "BoT exploration was purely analytical/theoretical - no external evidence gathered",
+    "impact_on_confidence": "Confidence should be lower due to lack of validation",
+    "confidence_penalty": -0.10,
+    "recommendation": "Target pattern should gather evidence early"
+  },
+
+  "confidence_transfer": {
+    "source_confidence": {
+      "pattern": "BoT",
+      "score": 0.70,
+      "basis": "Theoretical exploration only"
+    },
+    "transfer_adjustments": {
+      "empty_evidence_penalty": -0.10,
+      "information_loss": -0.02
+    },
+    "target_starting_confidence": {
+      "pattern": "ToT",
+      "score": 0.58,
+      "rationale": "No evidence to validate approaches - lower starting confidence"
+    }
+  },
+
+  "validation_result": {
+    "should_handover_proceed": true,
+    "reason": "Empty evidence is valid for design/theoretical problems",
+    "warning": "Target pattern should be aware no validation has occurred",
+    "suggested_action": "ToT should validate approaches against real constraints before deep exploration"
+  },
+
+  "metadata": {
+    "duration_minutes": 15,
+    "branches_explored": 6,
+    "evidence_gathered": 0,
+    "confidence_at_handover": 0.70
+  }
+}

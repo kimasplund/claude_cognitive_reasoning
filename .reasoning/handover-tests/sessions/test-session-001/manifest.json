@@ -1,0 +1,41 @@
+{
+  "session_id": "20260118-100000-test001a",
+  "created_at": "2026-01-18T10:00:00Z",
+  "last_updated": "2026-01-18T10:30:00Z",
+  "status": "active",
+
+  "problem": {
+    "statement": "Design a caching system for e-commerce platform",
+    "constraints": ["99.9% availability", "<50ms latency", "1M concurrent users"],
+    "success_criteria": ["Performance validated", "Consistency model defined", "Cost acceptable"]
+  },
+
+  "orchestration": {
+    "strategy": "sequential",
+    "planned_patterns": ["BoT", "ToT", "AR"],
+    "current_pattern": "BoT",
+    "pattern_history": []
+  },
+
+  "dimensions": {
+    "sequential_dependencies": 2,
+    "criteria_clarity": 4,
+    "solution_space_known": 3,
+    "single_answer_needed": 4,
+    "evidence_available": 3,
+    "opposing_valid_views": 3,
+    "problem_novelty": 2,
+    "robustness_required": 5,
+    "solution_exists": 3,
+    "time_pressure": 2,
+    "stakeholder_complexity": 2
+  },
+
+  "confidence": {
+    "overall": 0.0,
+    "by_pattern": {}
+  },
+
+  "checkpoints": [],
+  "active_handover": null
+}

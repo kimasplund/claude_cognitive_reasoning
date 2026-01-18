@@ -1,0 +1,67 @@
+{
+  "recovery_id": "recovery-20260118-110000",
+  "checkpoint_restored": "checkpoint-20260118-103000",
+  "recovery_trigger": "simulated_crash",
+  "recovery_timestamp": "2026-01-18T11:00:00Z",
+
+  "pre_recovery_state": {
+    "description": "Simulated crash during ToT level 1 evaluation",
+    "last_known_state": "Evaluating branch-2.3",
+    "data_at_risk": "branch-2.3 score may be incomplete"
+  },
+
+  "recovery_steps_executed": [
+    {
+      "step": 1,
+      "action": "Load manifest from ./manifest.json",
+      "result": "SUCCESS",
+      "details": "Session metadata restored, patterns_completed=[BoT], current_pattern=ToT"
+    },
+    {
+      "step": 2,
+      "action": "Validate checkpoint integrity",
+      "result": "SUCCESS",
+      "details": "Hash verification passed for manifest, pattern_state, evidence"
+    },
+    {
+      "step": 3,
+      "action": "Restore ToT state from checkpoint",
+      "result": "SUCCESS",
+      "details": "Restored to level 1, branch-2 winning, branches explored=[branch-1, branch-2, branch-3, branch-2.1, branch-2.2, branch-2.3]"
+    },
+    {
+      "step": 4,
+      "action": "Verify evidence repository",
+      "result": "SUCCESS",
+      "details": "Evidence index intact, 0 evidence items (expected for design problem)"
+    },
+    {
+      "step": 5,
+      "action": "Resume pattern execution",
+      "result": "SUCCESS",
+      "details": "ToT resumed at step 3 (evaluation), branch-2.3 being re-evaluated"
+    }
+  ],
+
+  "recovery_outcome": {
+    "status": "SUCCESS",
+    "state_fully_restored": true,
+    "data_loss": "Minimal - branch-2.3 evaluation restarted (< 5 minutes work)",
+    "confidence_before_crash": 0.82,
+    "confidence_after_recovery": 0.82,
+    "confidence_loss": 0.0
+  },
+
+  "recovery_verification": {
+    "manifest_matches_checkpoint": true,
+    "pattern_state_consistent": true,
+    "evidence_chain_intact": true,
+    "can_continue_session": true
+  },
+
+  "lessons_learned": {
+    "checkpoint_frequency": "15-minute intervals appropriate for this session",
+    "recovery_time": "< 1 minute to restore state",
+    "recommendation": "Consider auto-checkpoint on branch completion for ToT"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "parallel-merge-v1",
+  "merge_id": "merge-002-partial",
+  "timestamp": "2026-01-18T12:00:00Z",
+  "merge_type": "parallel_branches",
+  "test_scenario": "PARTIAL_AGREEMENT",
+
+  "branches": [
+    {
+      "pattern": "BoT",
+      "branch_id": "bot-002",
+      "conclusion": "Microservices with REST APIs",
+      "confidence": 0.75,
+      "key_insight": "REST is simpler and more widely understood"
+    },
+    {
+      "pattern": "AT",
+      "branch_id": "at-002",
+      "conclusion": "Microservices with gRPC",
+      "confidence": 0.72,
+      "key_insight": "Netflix analogy suggests gRPC for internal service communication"
+    },
+    {
+      "pattern": "DR",
+      "branch_id": "dr-002",
+      "conclusion": "Microservices with GraphQL federation",
+      "confidence": 0.68,
+      "key_insight": "Dialectical synthesis favors unified query layer"
+    }
+  ],
+
+  "agreement_analysis": {
+    "type": "PARTIAL_AGREEMENT",
+    "methodology": "Core concept extraction and comparison",
+    "agreeing_on": "Microservices architecture",
+    "disagreeing_on": "Communication protocol (REST vs gRPC vs GraphQL)",
+    "agreement_details": {
+      "majority_position": "Microservices (3/3 agree)",
+      "split_on": "Protocol choice (no majority)"
+    },
+    "confidence_calculation": {
+      "agreeing_branches": 3,
+      "agreeing_avg_confidence": 0.717,
+      "protocol_weighted": "0.717 * 0.7 = 0.502",
+      "disagreement_penalty": "0.717 * 0.15 = 0.108",
+      "merged_confidence": "0.502 + 0.108 = 0.61"
+    }
+  },
+
+  "merged_result": {
+    "conclusion": "Microservices architecture - protocol choice requires further analysis",
+    "confidence": 0.61,
+    "synthesis": "All three patterns agree on microservices as the architecture. However, they disagree on communication protocol. This indicates the problem is underspecified - protocol choice likely depends on factors not yet considered (performance requirements, team expertise, existing infrastructure).",
+    "open_questions": [
+      "What are the latency requirements for inter-service calls?",
+      "What is the team's experience with each protocol?",
+      "Is browser compatibility required for all services?"
+    ]
+  },
+
+  "merge_verification": {
+    "branches_complete": true,
+    "conclusions_compatible": "partial",
+    "confidence_aggregation_valid": true,
+    "synthesis_coherent": true,
+    "requires_further_analysis": true
+  },
+
+  "next_step": {
+    "pattern": "ToT",
+    "rationale": "Use ToT to evaluate protocol options (REST, gRPC, GraphQL) against specific criteria"
+  }
+}
