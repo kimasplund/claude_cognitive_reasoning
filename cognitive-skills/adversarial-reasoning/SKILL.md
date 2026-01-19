@@ -2,7 +2,6 @@
 name: adversarial-reasoning
 description: Red-team thinking for robustness testing and edge case discovery. Use when you need to stress-test solutions, find vulnerabilities, anticipate failures, or challenge assumptions. Ideal for security review, system design validation, decision stress-testing, and pre-mortem analysis. Example: "We've designed an auth system" → Attack it from 10 angles before shipping.
 license: MIT
-version: 2.0
 ---
 
 # Adversarial Reasoning (AR)

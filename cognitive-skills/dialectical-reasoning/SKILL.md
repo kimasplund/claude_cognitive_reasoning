@@ -2,7 +2,6 @@
 name: dialectical-reasoning
 description: Thesis-antithesis-synthesis reasoning for navigating genuine trade-offs and conflicting requirements. Use when opposing forces are both valid, binary choices are false, or stakeholder conflicts need resolution. Unlike ToT (picks winner), DR synthesizes opposites. Example: "Centralized vs decentralized architecture" → Neither is "right"; find synthesis that captures benefits of both.
 license: MIT
-version: 2.0
 ---
 
 # Dialectical Reasoning (DR)

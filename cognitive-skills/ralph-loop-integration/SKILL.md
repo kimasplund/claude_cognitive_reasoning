@@ -2,7 +2,6 @@
 name: ralph-loop-integration
 description: Persistent iteration wrapper for cognitive reasoning patterns using ralph-loop's Stop hook mechanism. Use when high confidence (>90%) is required, complex multi-pattern orchestration needs iterative refinement, self-correcting analysis is needed, or long-running tasks require checkpointed persistence. Wraps IR-v2 patterns in completion promise-gated loops.
 license: MIT
-version: 1.0
 ---
 
 # Ralph-Loop Integration for Cognitive Reasoning

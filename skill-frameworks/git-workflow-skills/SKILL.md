@@ -1,6 +1,7 @@
 ---
 name: git-workflow-skills
 description: Provides standardized Git workflows, commit message conventions, branching strategies, and collaboration patterns for all agents performing Git operations. Use when creating commits, choosing branching strategies, creating PRs, performing git operations (merge vs rebase), or handling git collaboration workflows.
+license: MIT
 ---
 
 # Git Workflow Skills

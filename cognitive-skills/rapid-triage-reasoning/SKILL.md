@@ -2,7 +2,6 @@
 name: rapid-triage-reasoning
 description: Fast decision-making methodology for time-critical situations. Use when you have minutes (not hours) to decide, during incidents, emergencies, or hard deadlines. Optimizes for "good enough now" over "perfect later". Unlike other patterns that maximize quality, RTR maximizes decision speed while maintaining acceptable quality floors.
 license: MIT
-version: 1.0
 ---
 
 # Rapid Triage Reasoning (RTR)

@@ -1,3 +1,9 @@
+---
+name: benchmark-framework
+description: Rigorous A/B/C testing framework for empirically evaluating reasoning patterns. Use when you need data-driven pattern selection, want to quantify trade-offs between patterns, or need to validate claims about which cognitive methodology performs best. Enables scientific measurement of quality, cost, and time trade-offs across ToT, BoT, SRC, HE, AR, DR, AT, RTR, and NDF patterns.
+license: MIT
+---
+
 # Cognitive Skills Benchmarking Framework
 
 ## Overview

@@ -1,6 +1,7 @@
 ---
 name: agent-memory-skills
 description: Self-improving agent architecture using ChromaDB for continuous learning, self-evaluation, and improvement storage. Agents maintain separate memory collections for learned patterns, performance metrics, and self-assessments without modifying their static .md configuration.
+license: MIT
 ---
 
 # Agent Memory & Continuous Self-Improvement Skills

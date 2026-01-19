@@ -2,7 +2,6 @@
 name: negotiated-decision-framework
 description: Multi-stakeholder coordination for decisions involving competing interests, different value systems, or organizational politics. Use when multiple parties must agree, when power dynamics affect decisions, or when consensus is required but perspectives diverge. Unlike DR (resolves conceptual tensions), NDF resolves stakeholder tensions.
 license: MIT
-version: 1.0
 ---
 
 # Negotiated Decision Framework (NDF)

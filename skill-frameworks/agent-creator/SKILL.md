@@ -1,6 +1,7 @@
 ---
 name: agent-creator
 description: Comprehensive guide for creating high-quality specialized agents following v2 architecture patterns. Use this skill when users need to design and implement new agents, understand agent architecture, or learn best practices for agent creation.
+license: MIT
 ---
 
 # Agent Creator

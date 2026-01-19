@@ -2,7 +2,6 @@
 name: parallel-execution
 description: Parallel execution patterns for cognitive reasoning tasks. Use when independent sub-problems can be solved simultaneously, multiple solution approaches need exploration, ensemble confidence is required, or time permits depth without sequential constraints. Integrates with ToT, BoT, HE, and AT for accelerated reasoning with fan-out/fan-in, MCTS-style search, and MoA aggregation patterns.
 license: MIT
-version: 1.0
 ---
 
 # Parallel Execution Patterns for Cognitive Reasoning

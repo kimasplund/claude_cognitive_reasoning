@@ -2,7 +2,6 @@
 name: reasoning-handover-protocol
 description: Protocol for cognitive pattern handovers during complex reasoning sessions. Defines .reasoning/ directory structure, handover schemas, and IR-v2 orchestration integration. Use when reasoning sessions require mid-stream pattern transitions, parallel branch merging, state checkpointing, or multi-pattern orchestration. Essential for complex problems where ToT, BoT, HE, or other patterns must hand off work to each other.
 license: MIT
-version: 1.0
 ---
 
 # Reasoning Handover Protocol

@@ -2,7 +2,6 @@
 name: hypothesis-elimination
 description: Systematic elimination reasoning for diagnosis and debugging. Use when you need to identify THE cause among many possibilities through evidence-based elimination. Ideal for production incidents, bug diagnosis, root cause analysis, and differential diagnosis. Unlike BoT (which explores), HE eliminates. Example: "Server is slow" → Generate 10 hypotheses, design discriminating tests, eliminate 9, confirm 1.
 license: MIT
-version: 2.0
 ---
 
 # Hypothesis-Elimination Reasoning (HE)

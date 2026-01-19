@@ -2,7 +2,6 @@
 name: integrated-reasoning-v2
 description: Enhanced meta-orchestration for selecting and combining reasoning patterns. Now includes 9 methodologies (ToT, BoT, SRC, HE, AR, DR, AT, RTR, NDF) with weighted multi-dimensional selection, feedback loops, uncertainty propagation, and validated confidence aggregation. Use when facing complex problems requiring optimal reasoning strategy selection.
 license: MIT
-version: 2.1
 ---
 
 # Integrated Reasoning v2 - Meta-Orchestration

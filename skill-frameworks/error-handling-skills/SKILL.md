@@ -1,6 +1,7 @@
 ---
 name: error-handling-skills
 description: Universal error handling, exception management, and logging best practices for all development agents across JavaScript/TypeScript, Python, Rust, Go, and Java. Use when implementing error handling, exception management, logging, error recovery, or debugging production issues.
+license: MIT
 ---
 
 # Error Handling Skills

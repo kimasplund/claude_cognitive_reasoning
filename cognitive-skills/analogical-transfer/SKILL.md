@@ -2,7 +2,6 @@
 name: analogical-transfer
 description: Cross-domain reasoning for novel problems through structured analogy. Use when facing unprecedented problems where the best approach is finding similar solved problems in other domains. Unlike BoT (explores options), AT finds parallels. Example: "Design a new marketplace" → What can we learn from malls, stock exchanges, auctions, dating apps?
 license: MIT
-version: 2.0
 ---
 
 # Analogical Transfer (AT)
