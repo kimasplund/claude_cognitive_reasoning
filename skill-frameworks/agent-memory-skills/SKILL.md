@@ -624,6 +624,134 @@ async function getAgentMemoryDashboard(agentName) {
 
 ---
 
+## Global vs Project Memory Scopes
+
+### Dual-Scope Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ Global Memory (~/.claude/chroma_data)                   │
+│ - Cross-project patterns that apply everywhere          │
+│ - Reusable learnings (search strategies, code quality)  │
+│ - Collections: agent_{name}_improvements                │
+│ - Persists: Forever (user's institutional knowledge)    │
+└─────────────────────────────────────────────────────────┘
+                         ↓ query both
+┌─────────────────────────────────────────────────────────┐
+│ Project Memory (.claude/chroma_data)                    │
+│ - Project-specific patterns (this codebase's style)     │
+│ - Domain knowledge (this API, this architecture)        │
+│ - Collections: agent_{name}_project_{hash}_improvements │
+│ - Persists: Project lifetime                            │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Memory Scope Selection
+
+```javascript
+function selectMemoryScope(insight) {
+  // Global: Universal patterns
+  if (insight.category in ['search_strategy', 'error_handling', 'code_quality',
+                           'testing_patterns', 'documentation_style']) {
+    return 'global';
+  }
+
+  // Project: Codebase-specific patterns
+  if (insight.category in ['naming_conventions', 'architecture_patterns',
+                           'api_usage', 'domain_terminology']) {
+    return 'project';
+  }
+
+  // Default: Store in both if uncertain
+  return 'both';
+}
+
+async function storeWithScope(agentName, improvement, scope = 'global') {
+  const globalCollection = `agent_${agentName}_improvements`;
+  const projectCollection = `agent_${agentName}_project_${getProjectHash()}_improvements`;
+
+  if (scope === 'global' || scope === 'both') {
+    await storeImprovement(globalCollection, improvement);
+  }
+  if (scope === 'project' || scope === 'both') {
+    await storeImprovement(projectCollection, improvement);
+  }
+}
+
+async function retrieveWithScope(agentName, taskDescription) {
+  const globalResults = await retrieveRelevantImprovements(
+    `agent_${agentName}_improvements`, taskDescription, 3
+  );
+  const projectResults = await retrieveRelevantImprovements(
+    `agent_${agentName}_project_${getProjectHash()}_improvements`, taskDescription, 3
+  );
+
+  // Merge and deduplicate, project-specific takes priority
+  return mergeImprovements(projectResults, globalResults);
+}
+```
+
+---
+
+## Slim Agent Integration Template
+
+Agents should reference this skill instead of duplicating memory code:
+
+```markdown
+## Memory Configuration (uses agent-memory-skills)
+
+**Collections**:
+- Global: `agent_{name}_improvements`, `agent_{name}_evaluations`, `agent_{name}_performance`
+- Project: `agent_{name}_project_{hash}_improvements` (if project-specific learning)
+
+**Quality Criteria** (agent-specific):
+- [criterion_1]: weight X%
+- [criterion_2]: weight Y%
+- [criterion_3]: weight Z%
+
+**Insight Categories** (agent-specific):
+- [category_1]: Description of when this applies
+- [category_2]: Description of when this applies
+
+**Memory Workflow**:
+1. **Phase 0.5 (Before Task)**: Retrieve relevant improvements
+   - Call: `retrieveWithScope(agentName, taskDescription)`
+   - Apply retrieved patterns to current task
+
+2. **Phase N.5 (After Task)**: Self-evaluate and store
+   - Assess quality using agent-specific criteria
+   - Extract insights with agent-specific categories
+   - Store improvements if quality ≥ 70
+   - Update usage statistics for retrieved improvements
+```
+
+### Example: Slim Code-Finder Memory Section
+
+```markdown
+## Memory Configuration (uses agent-memory-skills)
+
+**Collections**: `agent_code_finder_improvements`, `agent_code_finder_evaluations`
+
+**Quality Criteria**:
+- Result accuracy: 30%
+- Search confidence: 25%
+- Strategy completeness: 20%
+- Search efficiency: 15%
+- Coverage assessment: 10%
+
+**Insight Categories**:
+- `search_strategy`: Effective search patterns for code types
+- `file_patterns`: File naming/location patterns that work
+- `naming_conventions`: Casing and naming variants that help
+- `query_optimization`: Query formulations that improve results
+
+**Memory Workflow**:
+- Phase 0.5: Retrieve search strategy improvements before search
+- Phase 4.5: Evaluate search quality, store effective patterns
+```
+
+---
+
 ## Success Criteria
 
 Agent memory system is working when:
