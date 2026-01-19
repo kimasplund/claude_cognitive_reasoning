@@ -4,7 +4,7 @@ A comprehensive cognitive architecture for AI agents, featuring 9 reasoning patt
 
 **Author:** Kim Asplund
 **License:** MIT
-**Version:** 2.1
+**Version:** 3.0
 
 ---
 
@@ -12,11 +12,12 @@ A comprehensive cognitive architecture for AI agents, featuring 9 reasoning patt
 
 - **9 Core Reasoning Patterns** - Specialized methodologies for different problem types
 - **IR-v2 Meta-Orchestrator** - Automatic pattern selection using 11-dimension scoring
-- **10 Production Agents** - Ready-to-use agent implementations
-- **9 Skill Frameworks** - Domain-specific capabilities (security, git, documentation, etc.)
+- **17 Production Agents** - Ready-to-use agent implementations with ChromaDB memory
+- **10 Skill Frameworks** - Domain-specific capabilities (security, git, documentation, etc.)
 - **Parallel Execution** - Run multiple patterns simultaneously for 2-4x speedup
 - **Handover Protocol** - State persistence across multi-pattern reasoning chains
 - **Self-Improving Architecture** - Agents learn and improve via ChromaDB memory
+- **Memory Consolidation** - "Sleep-like" periodic consolidation for cross-agent learning
 
 ---
 
@@ -130,7 +131,14 @@ claude_cognitive_reasoning/
 │   ├── pm-planner.md                  # Project planning
 │   ├── pm-executor.md                 # Execution tracking
 │   ├── research-specialist.md         # Research synthesis
-│   └── agent-hr-manager.md            # Agent creation & management
+│   ├── agent-hr-manager.md            # Agent creation & management
+│   ├── memory-consolidation-agent.md  # "Sleep-like" memory optimization
+│   ├── code-finder.md                 # Code location & search
+│   ├── codebase-documenter.md         # Documentation generation
+│   ├── docs-git-committer.md          # Doc updates & git commits
+│   ├── frontend-ui-developer.md       # UI/UX development
+│   ├── implementor.md                 # Feature implementation
+│   └── product-manager-agent.md       # Product strategy
 │
 ├── skill-frameworks/                  # Domain-specific skills
 │   ├── agent-creator/                 # Create new agents
@@ -145,6 +153,12 @@ claude_cognitive_reasoning/
 │
 ├── commands/                          # Claude Code commands
 │   └── init-workspace.md              # Initialize project workspace (v3.0)
+│
+├── research/                          # Research papers & analysis
+│   ├── llm_reasoning_psychology_research_2025-01.md
+│   ├── meta-cognitive-architectures-research-2026-01.md
+│   ├── memory_consolidation_analysis_2026-01.md
+│   └── memory_consolidation_ai_agents_research_2026-01.md
 │
 └── .reasoning/                        # Test results & validation
     ├── pattern-tests/                 # Individual pattern tests
@@ -191,16 +205,25 @@ IR-v2 automatically selects the optimal pattern(s) using 11-dimension scoring:
 
 ## Agents Overview
 
-| Agent | Quality Score | Primary Pattern | Use Case |
-|-------|---------------|-----------------|----------|
-| **ceo-orchestrator** | 78/100 | IR-v2 | Strategic decisions, resource allocation |
-| **architect-agent** | 80/100 | DR, ToT, AR | System design, architecture decisions |
-| **security-agent** | 82/100 | AR, HE | Threat modeling, vulnerability assessment |
-| **root-cause-analyzer** | 79/100 | HE | Debugging, incident investigation |
-| **break-it-tester** | 77/100 | AR | Adversarial testing, finding bugs |
-| **research-specialist** | 75/100 | BoT, AT | Research synthesis, exploration |
-| **pm-planner** | 74/100 | ToT, NDF | Project planning, requirements |
-| **pm-executor** | 73/100 | RTR | Task tracking, execution |
+| Agent | Primary Pattern | Use Case |
+|-------|-----------------|----------|
+| **ceo-orchestrator** | IR-v2 | Strategic decisions, resource allocation |
+| **architect-agent** | DR, ToT, AR | System design, architecture decisions |
+| **security-agent** | AR, HE | Threat modeling, vulnerability assessment |
+| **root-cause-analyzer** | HE | Debugging, incident investigation |
+| **break-it-tester** | AR | Adversarial testing, finding bugs |
+| **research-specialist** | BoT, AT | Research synthesis, exploration |
+| **pm-planner** | ToT, NDF | Project planning, requirements |
+| **pm-executor** | RTR | Task tracking, execution |
+| **memory-consolidation-agent** | - | Cross-agent learning, memory optimization |
+| **code-finder** | - | Code location, pattern search |
+| **codebase-documenter** | - | Documentation generation |
+| **docs-git-committer** | - | Doc updates, git commits |
+| **frontend-ui-developer** | - | UI/UX component development |
+| **implementor** | - | Feature implementation |
+| **product-manager-agent** | - | Product strategy, roadmaps |
+| **agent-hr-manager** | - | Agent creation & management |
+| **qa-agent** | - | Test planning |
 
 ---
 
@@ -289,7 +312,7 @@ Contributions welcome! Please:
 
 ---
 
-## Research Papers
+## Research & References
 
 This framework incorporates concepts from:
 
@@ -297,8 +320,13 @@ This framework incorporates concepts from:
 - Chain-of-Thought Prompting (Wei et al., 2022)
 - Self-Consistency (Wang et al., 2023)
 - ReAct: Reasoning and Acting (Yao et al., 2022)
+- Memory Consolidation in Cognitive Architectures (2024-2026)
 
-See `llm_reasoning_psychology_research_2025-01.md` and `meta-cognitive-architectures-research-2026-01.md` for detailed research notes.
+See the `research/` directory for detailed research notes:
+- `llm_reasoning_psychology_research_2025-01.md` - LLM reasoning psychology foundations
+- `meta-cognitive-architectures-research-2026-01.md` - Meta-cognitive architecture patterns
+- `memory_consolidation_analysis_2026-01.md` - Human memory consolidation mechanisms
+- `memory_consolidation_ai_agents_research_2026-01.md` - AI agent memory consolidation SOTA
 
 ---
 
