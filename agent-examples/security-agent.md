@@ -7,7 +7,6 @@ color: red
 ---
 
 **Agent**: Security Agent
-**Version**: 1.0
 **Last Updated**: 2026-01-18
 **Quality Score**: 78/100
 **Category**: Security / Analysis
@@ -375,15 +374,3 @@ After completing analysis, ask yourself:
 | Root Cause Analyzer | Security Agent detects incident; Analyzer investigates root cause |
 | Developer Agent | Security Agent reviews code; Developer implements secure fixes |
 
----
-
-## Changelog
-
-### v1.0 (2026-01-18)
-- Initial release with STRIKE framework
-- STRIDE+ threat modeling
-- OWASP Top 10 checklist
-- CVSS risk scoring
-- HEDAM incident investigation
-- RAPID active incident response
-- Quality Score: 78/100

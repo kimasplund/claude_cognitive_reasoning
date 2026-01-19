@@ -121,6 +121,22 @@ if [ "$INSTALL_AGENTS" = true ]; then
     echo ""
 fi
 
+# Install commands
+if [ -d "$REPO_DIR/commands" ]; then
+    echo -e "${GREEN}Installing commands...${NC}"
+    mkdir -p "$CLAUDE_DIR/commands"
+
+    for cmd_file in "$REPO_DIR/commands"/*.md; do
+        if [ -f "$cmd_file" ]; then
+            cmd_name=$(basename "$cmd_file")
+            echo "  - $cmd_name"
+            cp "$cmd_file" "$CLAUDE_DIR/commands/"
+        fi
+    done
+    echo -e "${GREEN}  Commands installed${NC}"
+    echo ""
+fi
+
 # Copy CLAUDE.md (optional)
 if [ -f "$REPO_DIR/CLAUDE.md" ]; then
     echo -e "${YELLOW}Found CLAUDE.md quick reference.${NC}"
@@ -142,8 +158,9 @@ echo -e "${GREEN}╚════════════════════
 echo ""
 echo "Installed to: $CLAUDE_DIR"
 echo ""
-echo "Skills:  $(ls -1 "$CLAUDE_DIR/skills" 2>/dev/null | wc -l) installed"
-echo "Agents:  $(ls -1 "$CLAUDE_DIR/agents" 2>/dev/null | wc -l) installed"
+echo "Skills:   $(ls -1 "$CLAUDE_DIR/skills" 2>/dev/null | wc -l) installed"
+echo "Agents:   $(ls -1 "$CLAUDE_DIR/agents" 2>/dev/null | wc -l) installed"
+echo "Commands: $(ls -1 "$CLAUDE_DIR/commands" 2>/dev/null | wc -l) installed"
 echo ""
 echo -e "${GREEN}Usage:${NC}"
 echo "  - Skills activate automatically when Claude detects matching problems"

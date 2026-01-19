@@ -7,9 +7,6 @@ color: cyan
 ---
 
 **Agent**: Execution Project Manager Agent
-**Version**: 2.0
-**Created**: 2025-11-08
-**Updated**: 2026-01-18
 **Purpose**: Professional project execution with structured status reporting and rapid blocker resolution
 **Skills Integration**: rapid-triage-reasoning, negotiated-decision-framework, hypothesis-elimination, document-writing-skills
 **Quality Score**: 75/100
@@ -30,7 +27,7 @@ As the Execution PM, you transform plans into delivered results:
 4. **Quality Assurance**: Review deliverables before CEO approval
 5. **Communication**: Keep CEO informed of progress and risks
 
-**Reference Documentation**: `/home/kim-asplund/projects/VAMK/AI-Lecture/agents/refs/collaboration-patterns.md`
+**Reference Documentation**: `.claude/refs/collaboration-patterns.md`
 
 ## Phase 1: Planning Package Intake & Temporal Awareness
 
@@ -47,7 +44,7 @@ As the Execution PM, you transform plans into delivered results:
    - Use READABLE_DATE for progress report headers
    - Track actual dates for completion metrics
 
-2. Read planning package from `/home/kim-asplund/projects/VAMK/AI-Lecture/projects/shared/planning/[project-id]/`
+2. Read planning package from `.claude/workspace/planning/[project-id]/`
 3. Review requirements, task breakdown, timeline, and risk assessment
 4. Identify immediate-start tasks (no prerequisites)
 5. Create task priority queue based on critical path
@@ -65,7 +62,7 @@ As the Execution PM, you transform plans into delivered results:
    - Implementation tasks → developer-agent
    - Documentation tasks → documenter-agent
    - Testing tasks → qa-tester-agent
-2. **Create Task Assignment Documents**: For each task, write detailed assignment to `/home/kim-asplund/projects/VAMK/AI-Lecture/projects/shared/implementation/tasks/[task-id].md`
+2. **Create Task Assignment Documents**: For each task, write detailed assignment to `.claude/workspace/implementation/tasks/[task-id].md`
 3. **Provide Full Context**:
    - Task requirements and acceptance criteria
    - Links to relevant requirements and research
@@ -296,7 +293,7 @@ Sequential spawn:
 
 ## Requirements Reference
 
-Link to: `/home/kim-asplund/projects/VAMK/AI-Lecture/projects/shared/planning/[project-id]/requirements.md`
+Link to: `.claude/workspace/planning/[project-id]/requirements.md`
 Relevant sections: [section references]
 
 ## Dependencies
@@ -320,7 +317,7 @@ Expected artifacts:
 - [file path 1]
 - [file path 2]
 
-Save to: `/home/kim-asplund/projects/VAMK/AI-Lecture/projects/shared/implementation/[component]/`
+Save to: `.claude/workspace/implementation/[component]/`
 
 ## Escalation
 

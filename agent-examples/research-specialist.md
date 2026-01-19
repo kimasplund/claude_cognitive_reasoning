@@ -7,9 +7,6 @@ color: blue
 ---
 
 **Agent**: Research Specialist
-**Version**: 5.0
-**Created**: 2025-11-08
-**Updated**: 2026-01-18
 **Purpose**: Self-improving research agent with continuous learning, ChromaDB memory, and persistent knowledge base
 **Domain**: Information Research, Fact-Checking, Source Verification, Market Analysis, Cross-Research Intelligence
 **Complexity**: Medium-High
@@ -1435,45 +1432,3 @@ You are a Research Specialist, an expert researcher with advanced skills in info
 - Knowledge base now contains 23 findings ready for future reuse
 - Citation network connects 3 research domains
 
----
-
-## Changelog
-
-### v4.0 (2025-11-18)
-- **Added**: Agent self-improvement with continuous learning via ChromaDB memory
-- **Added**: Phase 0.5: Retrieve Agent Memory (load improvements before task)
-- **Added**: Phase 5.5: Self-Evaluation & Memory Storage (learn from every task)
-- **Added**: 3 agent memory collections:
-  - `agent_research_specialist_improvements` (learned patterns)
-  - `agent_research_specialist_evaluations` (task assessments)
-  - `agent_research_specialist_performance` (metrics tracking)
-- **Added**: Quality score calculation (0-100) based on sources, verification, confidence
-- **Added**: Insight extraction with categories (source_selection, search_strategy, etc.)
-- **Added**: Improvement usage statistics (usage_count, success_rate)
-- **Added**: Auto-deprecation for low-performing improvements (<40% success after 10 uses)
-- **Added**: Performance metrics tracking (daily success rate, avg quality)
-- **Added**: 6 new success criteria for agent memory system
-- **Added**: 4 new self-critique questions for memory management
-- **Updated**: Quality Score from 80/80 to 85/100
-- **Updated**: Skills Integration: Added agent-memory-skills, chromadb-integration-skills
-- **Updated**: Core Responsibilities: Added continuous learning, memory storage, performance tracking
-- Impact: Agent learns from experience, improves over time (proof-of-concept shows 60% → 87% success rate)
-
-### v3.0 (2025-11-14)
-- **Added**: ChromaDB integration for persistent knowledge base (Phase 4.5)
-- **Added**: Source deduplication across research projects
-- **Added**: Cross-research fact validation and consistency checking
-- **Added**: Expert opinion aggregation and tracking
-- **Added**: Citation network building with related topics
-- **Added**: Knowledge base assessment in Phase 1 (step 6)
-- **Added**: 9 new success criteria for ChromaDB features
-- **Added**: 6 new self-critique questions for knowledge management
-- **Updated**: Report structure includes ChromaDB knowledge base summary
-- **Updated**: Complexity from Medium to Medium-High
-- **Updated**: Core responsibilities include persistent knowledge and cross-research intelligence
-- Quality Score: Maintained 80/80
-
-### v2.0 (2025-11-08)
-- Initial comprehensive research agent with temporal awareness
-- 5 phases: Planning, Gathering, Verification, Analysis, Report Creation
-- Quality Score: 80/80

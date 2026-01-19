@@ -51,6 +51,10 @@ cp agent-examples/*.md ~/.claude/agents/
 # Install skill frameworks
 cp -r skill-frameworks/* ~/.claude/skills/
 
+# Install commands
+mkdir -p ~/.claude/commands
+cp commands/*.md ~/.claude/commands/
+
 # Copy the CLAUDE.md quick reference (optional - for project-level)
 cp CLAUDE.md ~/.claude/CLAUDE.md
 ```
@@ -138,6 +142,9 @@ claude_cognitive_reasoning/
 │   ├── document-writing-skills/       # Documentation templates
 │   ├── git-workflow-skills/           # Git best practices
 │   └── confidence-check-skills/       # Pre-implementation validation
+│
+├── commands/                          # Claude Code commands
+│   └── init-workspace.md              # Initialize project workspace (v3.0)
 │
 └── .reasoning/                        # Test results & validation
     ├── pattern-tests/                 # Individual pattern tests

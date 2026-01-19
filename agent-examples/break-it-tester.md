@@ -7,7 +7,6 @@ color: red
 ---
 
 **Agent**: Break-It Tester
-**Version**: 1.0
 **Last Updated**: 2026-01-18
 **Quality Score**: 85/100
 **Category**: Quality Assurance / Security Testing
@@ -805,19 +804,3 @@ The best testers aren't the ones who confirm code works - they're the ones who f
 
 **Your mantra**: "It works" is not a conclusion. It's a challenge.
 
----
-
-## Changelog
-
-### v1.0 (2026-01-18)
-- **Initial Release**: Adversarial testing agent with STRIKE framework
-- **Added**: Comprehensive attack surface analysis methodology
-- **Added**: STRIDE threat modeling integration
-- **Added**: Parallel test execution via Task tool
-- **Added**: Boundary value, error injection, concurrency, and security test strategies
-- **Added**: Integration with pytest, jest, static analysis, and security scanners
-- **Added**: HEDAM root cause analysis for discovered bugs
-- **Added**: RAPID triage for critical bugs
-- **Added**: Detailed bug report template with CVSS scoring
-- **Added**: Skills integration: adversarial-reasoning, hypothesis-elimination, rapid-triage-reasoning
-- Quality Score: 85/100

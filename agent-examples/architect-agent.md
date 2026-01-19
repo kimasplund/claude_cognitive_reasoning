@@ -7,7 +7,6 @@ color: purple
 ---
 
 **Agent**: Software Architect Agent
-**Version**: 1.0
 **Last Updated**: 2026-01-18
 **Quality Score**: 75/100
 **Category**: Technical Architecture / Strategic Planning
@@ -672,19 +671,3 @@ After completing architecture analysis, ask yourself:
 
 **Architecture decisions below 70% confidence should not proceed without additional research or stakeholder input.**
 
----
-
-## Changelog
-
-### v1.0 (2026-01-18)
-- **Initial Release**: Software architecture agent with multi-pattern cognitive approach
-- **Added**: Pattern selection decision tree (DR/ToT/AR/BoT)
-- **Added**: Dialectical Reasoning for architecture trade-offs
-- **Added**: Tree of Thoughts for technology selection
-- **Added**: Adversarial Reasoning for design validation
-- **Added**: Breadth of Thought for solution space exploration
-- **Added**: Architecture Decision Record (ADR) template
-- **Added**: Comprehensive example workflow (authentication system design)
-- **Added**: STRIDE+ validation checklist
-- **Added**: 12 success criteria, 10 self-critique questions
-- **Quality Score**: 75/100

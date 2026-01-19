@@ -34,7 +34,61 @@ Do NOT use for:
 
 ---
 
-## 5-Step Agent Creation Workflow
+## 6-Step Agent Creation Workflow
+
+### Step 0: Research Existing Patterns (BEFORE DESIGN)
+
+**Objective**: Understand what already exists before creating something new. This prevents duplicate agents and ensures you leverage proven patterns.
+
+**Why this matters**: Creating an agent without research leads to:
+- Duplicating existing agent functionality
+- Missing reusable patterns from similar agents
+- Not discovering skills that solve part of the problem
+- Reinventing methodology that already exists
+
+**Actions**:
+
+1. **Search for Similar Agents**:
+   ```bash
+   # List all available agents
+   ls ~/.claude/agents/ | head -20
+
+   # Search for agents in similar domain
+   grep -l "[domain-keyword]" ~/.claude/agents/*.md 2>/dev/null
+   ```
+
+2. **Review Relevant Agent Examples**:
+   - Read `references/agent-examples.md` for quality patterns
+   - Study agents with high quality scores (60+/80)
+   - Note phase structures that work for similar domains
+
+3. **Check Skill Inventory**:
+   ```bash
+   # List available skills
+   ls ~/.claude/skills/
+
+   # Search for domain-relevant skills
+   grep -r "[domain-keyword]" ~/.claude/skills/*/SKILL.md 2>/dev/null | head -10
+   ```
+
+4. **Decision Checkpoint** (REQUIRED):
+   ```markdown
+   | Question | Answer |
+   |----------|--------|
+   | Similar agent exists? | [yes/no - if yes, consider tuning instead] |
+   | Relevant skills found? | [list skills to integrate] |
+   | Reusable patterns identified? | [list patterns to follow] |
+   | Proceed with new agent? | [yes with justification] |
+   ```
+
+5. **Research Novel Domains** (if unfamiliar):
+   - Use WebSearch for domain best practices
+   - Find authoritative sources and frameworks
+   - Document key methodologies the agent should follow
+
+**Deliverable**: Research summary documenting similar agents, skills to integrate, and justification for new agent.
+
+---
 
 ### Step 1: Temporal Awareness & Requirements Gathering (CRITICAL)
 
@@ -84,6 +138,62 @@ Do NOT use for:
 - **Boundary Testing**: What are the limits (file size, complexity, scope)?
 
 **Output**: Requirements document or clear mental model before proceeding.
+
+---
+
+### Step 1.5: Skill Discovery & Integration Planning
+
+**Objective**: Identify which existing skills to integrate into the agent and how.
+
+**Why this matters**: This skill moves beyond "prompt engineering" into "cognitive architecture" — ensuring the agent doesn't use a hammer for a screw. Proper skill integration gives agents specialized capabilities without reinventing them.
+
+**Actions**:
+
+1. **Map Requirements to Skill Categories**:
+   ```markdown
+   | Agent Requirement | Skill Category | Candidate Skills |
+   |-------------------|----------------|------------------|
+   | Debugging logic | Reasoning | hypothesis-elimination, self-reflecting-chain |
+   | Security review | Development | security-analysis-skills, adversarial-reasoning |
+   | Documentation | Documentation | document-writing-skills |
+   | Database ops | Integration | chromadb-integration-skills |
+   | Testing | Development | testing-methodology-skills |
+   | Error handling | Development | error-handling-skills |
+   ```
+
+2. **Evaluate Each Candidate Skill**:
+   ```markdown
+   | Skill | Size | Active? | Integrate or Inline? |
+   |-------|------|---------|---------------------|
+   | [skill-name] | [lines] | [yes/no] | [integrate/inline/skip] |
+   ```
+
+   **Decision Criteria**:
+   - **Integrate** if: Skill >100 lines, actively maintained, reusable
+   - **Inline** if: Simple pattern <20 lines, agent-specific variant needed
+   - **Skip** if: Not relevant after review
+
+3. **Document Skills Integration**:
+   ```markdown
+   **Skills Integration**: skill-1, skill-2, skill-3
+   ```
+   This goes in the agent's header metadata.
+
+4. **Plan Skill Invocation Points**:
+   ```markdown
+   | Phase | When to Invoke | Skill |
+   |-------|----------------|-------|
+   | Phase 2 | Complex decision | integrated-reasoning-v2 |
+   | Phase 3 | Design validation | adversarial-reasoning |
+   | Phase 4 | Error recovery | hypothesis-elimination |
+   ```
+
+5. **Check for Handover/Parallelism Needs**:
+   - Will the agent need multi-pattern reasoning? → Add reasoning-handover-protocol
+   - Will tasks run in parallel? → Add parallel-execution skill
+   - See `cognitive-skills/INTEGRATION_GUIDE.md` for patterns
+
+**Deliverable**: Skill integration plan with invocation points documented.
 
 ---
 

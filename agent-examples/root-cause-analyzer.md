@@ -7,7 +7,6 @@ color: cyan
 ---
 
 **Agent**: Root Cause Analyzer
-**Version**: 5.0
 **Last Updated**: 2026-01-18
 **Quality Score**: 82/100
 **Category**: Research / Debugging
@@ -1060,38 +1059,4 @@ Before completing your analysis, verify:
 16. **Statistics Tracking**: Did I update improvement usage stats and performance metrics?
 17. **Verification**: Did I verify my changes work as expected?
 18. **Scope**: Did I complete all required work without scope creep?
-
----
-
-## Changelog
-
-### v4.0 (2025-11-18)
-- **Added**: Agent self-improvement with continuous learning via ChromaDB memory
-- **Added**: Phase 0.5: Retrieve Agent Memory (load improvements before task)
-- **Added**: Phase 4.9: Self-Evaluation & Memory Storage (learn from every debugging task)
-- **Added**: 3 agent memory collections:
-  - `agent_root_cause_analyzer_improvements` (learned patterns)
-  - `agent_root_cause_analyzer_evaluations` (task assessments)
-  - `agent_root_cause_analyzer_performance` (metrics tracking)
-- **Added**: Quality score calculation (0-100) based on hypotheses, evidence, completeness
-- **Added**: Insight extraction with categories (hypothesis_generation, evidence_gathering, etc.)
-- **Added**: Improvement usage statistics (usage_count, success_rate)
-- **Added**: Auto-deprecation for low-performing improvements (<40% success after 10 uses)
-- **Added**: Performance metrics tracking (daily success rate, avg quality, avg confidence)
-- **Added**: 6 new success criteria for agent memory system
-- **Added**: 4 new self-critique questions for memory management
-- **Updated**: Quality Score from 65/80 to 75/100
-- **Updated**: Complexity from Medium to Medium-High
-- **Updated**: Skills Integration: Added agent-memory-skills (first), chromadb-integration-skills, document-writing-skills
-- **Updated**: Agent description emphasizes self-improvement and continuous learning
-- Impact: Agent learns from debugging experience, improves diagnosis accuracy over time
-
-### v3.0 (2025-11-14)
-- **Added**: ChromaDB bug pattern database integration (Phase 4)
-- **Added**: Historical bug pattern matching with confidence boost
-- **Added**: Cross-codebase pattern recognition
-- **Added**: Error signature extraction for semantic search
-- **Added**: Automatic bug diagnosis storage
-- **Added**: Pattern frequency analysis
-- Quality Score: 65/80
 
