@@ -752,6 +752,128 @@ Agents should reference this skill instead of duplicating memory code:
 
 ---
 
+## Memory Consolidation Integration
+
+Individual agent memories benefit from periodic consolidation by the **memory-consolidation-agent**. This section describes how agents interact with the consolidation system.
+
+### Consolidation-Ready Metadata
+
+When storing improvements, include metadata that enables consolidation:
+
+```javascript
+const improvementMetadata = {
+  // Standard fields
+  agent_name: agentName,
+  category: insight.category,
+  confidence: insight.confidence,
+  created_at: timestamp,
+  usage_count: 0,
+  success_rate: null,
+
+  // Consolidation-ready fields
+  cross_validated: false,           // Set true when validated across agents
+  source: 'self',                   // 'self' | 'system_principles' | 'transferred'
+  original_id: null,                // If transferred from another agent
+  consolidation_eligible: true,     // Can be used for schema formation
+  context_tags: ['domain', 'tech'], // Help consolidation group related patterns
+  deprecated: false,
+  deprecated_reason: null
+};
+```
+
+### Receiving Transferred Knowledge
+
+Agents may receive improvements from the consolidation system. Handle these appropriately:
+
+```javascript
+async function retrieveWithTransfers(agentName, taskDescription) {
+  const results = await mcp__chroma__query_documents({
+    collection_name: `agent_${agentName}_improvements`,
+    query_texts: [taskDescription],
+    n_results: 10,
+    where: { "deprecated": { "$ne": true } }
+  });
+
+  // Prioritize cross-validated and transferred improvements
+  return results.ids[0]
+    .map((id, idx) => ({
+      id: id,
+      improvement: results.documents[0][idx],
+      metadata: results.metadatas[0][idx],
+      relevance: 1 - results.distances[0][idx],
+      // Boost score for cross-validated patterns
+      priority: results.metadatas[0][idx].cross_validated ? 1.2 : 1.0
+    }))
+    .filter(item => item.relevance > 0.6)
+    .sort((a, b) => (b.relevance * b.priority) - (a.relevance * a.priority));
+}
+```
+
+### Consolidation Hooks
+
+Agents should expose these hooks for the consolidation system:
+
+```javascript
+// Hook: Get all improvements for consolidation analysis
+async function getConsolidatableImprovements(agentName) {
+  return await mcp__chroma__get_documents({
+    collection_name: `agent_${agentName}_improvements`,
+    where: { "consolidation_eligible": true, "deprecated": { "$ne": true } },
+    include: ["documents", "metadatas"]
+  });
+}
+
+// Hook: Mark improvement as cross-validated
+async function markCrossValidated(agentName, improvementId, validatingAgents) {
+  const current = await mcp__chroma__get_documents({
+    collection_name: `agent_${agentName}_improvements`,
+    ids: [improvementId]
+  });
+
+  await mcp__chroma__update_documents({
+    collection_name: `agent_${agentName}_improvements`,
+    ids: [improvementId],
+    metadatas: [{
+      ...current.metadatas[0],
+      cross_validated: true,
+      validating_agents: validatingAgents.join(','),
+      cross_validated_at: new Date().toISOString()
+    }]
+  });
+}
+
+// Hook: Receive transferred principle from consolidation
+async function receiveTransferredPrinciple(agentName, principle, sourceMetadata) {
+  await mcp__chroma__add_documents({
+    collection_name: `agent_${agentName}_improvements`,
+    documents: [principle],
+    ids: [`transferred_${sourceMetadata.original_id}_${Date.now()}`],
+    metadatas: [{
+      agent_name: agentName,
+      category: sourceMetadata.category,
+      confidence: sourceMetadata.confidence * 0.9,  // Discount for transfer
+      source: 'system_principles',
+      original_id: sourceMetadata.original_id,
+      cross_validated: true,
+      transferred_at: new Date().toISOString(),
+      usage_count: 0,
+      success_rate: null,
+      consolidation_eligible: false  // Don't re-consolidate transferred items
+    }]
+  });
+}
+```
+
+### Consolidation Schedule
+
+| Frequency | What Happens | Agent Impact |
+|-----------|--------------|--------------|
+| **Daily** | Conflict scan, anomaly detection | Flagged conflicts may need review |
+| **Weekly** | Schema formation, knowledge transfer | May receive new transferred principles |
+| **Monthly** | Full optimization, cleanup | Old improvements may be archived |
+
+---
+
 ## Success Criteria
 
 Agent memory system is working when:
