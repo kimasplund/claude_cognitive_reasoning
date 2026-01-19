@@ -87,6 +87,57 @@ This document consolidates the version history for all agents in the `agent-exam
 
 ---
 
+## Codebase Documenter
+
+### v2.0 (2025-11-18)
+- **Added**: Agent self-improvement with continuous learning via ChromaDB memory
+- **Added**: Phase 0.5: Retrieve Agent Memory (load improvements before task)
+- **Added**: Phase 3.5: Self-Evaluation & Memory Storage (learn from every task)
+- **Added**: 3 agent memory collections:
+  - `agent_codebase_documenter_improvements` (learned documentation patterns)
+  - `agent_codebase_documenter_evaluations` (task assessments)
+  - `agent_codebase_documenter_performance` (metrics tracking)
+- **Added**: Quality score calculation (0-100) based on clarity, completeness, examples, organization, audience fit, code accuracy
+- **Added**: Insight extraction with categories (doc_structure, clarity_patterns, example_quality, audience_targeting)
+- **Added**: Improvement usage statistics (usage_count, success_rate)
+- **Added**: Auto-deprecation for low-performing improvements (<40% success after 10 uses)
+- **Updated**: Quality Score to 72/100
+- **Updated**: Skills Integration: agent-memory-skills
+- **Updated**: Complexity from Medium to Medium-High
+- Impact: Agent learns from experience, improves documentation quality over time
+
+### v1.0 (2025-11-06)
+- Initial comprehensive documentation agent
+- 3 phases: Analysis, Information Extraction, Documentation Creation
+- Codebase research and feature/API documentation
+
+---
+
+## Code Finder
+
+### v2.0 (2025-11-18)
+- **Added**: Agent self-improvement with continuous learning via ChromaDB memory
+- **Added**: Phase 0.5: Retrieve Agent Memory (load improvements before search)
+- **Added**: Phase 4.5: Self-Evaluation & Memory Storage (learn from every search)
+- **Added**: 3 agent memory collections:
+  - `agent_code_finder_improvements` (learned search patterns)
+  - `agent_code_finder_evaluations` (task assessments)
+  - `agent_code_finder_performance` (metrics tracking)
+- **Added**: Quality score calculation (0-100) based on accuracy, confidence, strategy, efficiency, coverage
+- **Added**: Insight extraction with categories (search_strategy, file_patterns, naming_conventions, query_optimization)
+- **Added**: Improvement usage statistics (usage_count, success_rate)
+- **Added**: Auto-deprecation for low-performing improvements (<40% success after 10 uses)
+- **Updated**: Quality Score to 70/100
+- **Updated**: Skills Integration: agent-memory-skills, chromadb-integration-skills
+- Impact: Agent learns from search experience, improves discovery accuracy over time
+
+### v1.0 (2025-11-08)
+- Initial code discovery agent with systematic search methodology
+- 4 phases: Query Analysis, Search Execution, Validation, Reporting
+- Multi-strategy search (Glob, Grep, Combined)
+
+---
+
 ## CEO Orchestrator
 
 ### v3.1 (2026-01-19)
@@ -132,6 +183,95 @@ This document consolidates the version history for all agents in the `agent-exam
 - Reasoning skills orchestration (integrated-reasoning, tree-of-thoughts, breadth-of-thought, self-reflecting-chain)
 - Communication protocols for task assignments and status updates
 - **Quality Score**: 78/100
+
+---
+
+## Docs Git Committer
+
+### v2.0 (2025-11-18)
+- **Added**: Agent self-improvement with continuous learning via ChromaDB memory
+- **Added**: Phase 0.5: Retrieve Agent Memory (load improvements before task)
+- **Added**: Phase 5.5: Self-Evaluation & Memory Storage (learn from every documentation and commit task)
+- **Added**: 3 agent memory collections:
+  - `agent_docs_git_committer_improvements` (learned patterns)
+  - `agent_docs_git_committer_evaluations` (task assessments)
+  - `agent_docs_git_committer_performance` (metrics tracking)
+- **Added**: Quality score calculation (0-100) based on documentation clarity and commit quality
+- **Added**: Insight extraction with categories (commit_messages, doc_updates, changelog_patterns, release_notes, version_management)
+- **Added**: Improvement usage statistics (usage_count, success_rate)
+- **Added**: Auto-deprecation for low-performing improvements (<40% success after 10 uses)
+- **Updated**: Quality Score to 70/100
+- **Updated**: Skills Integration: agent-memory-skills, document-writing-skills, git-workflow-skills
+- Impact: Agent learns from documentation and commit experience, improves quality over time
+
+### v1.0 (2025-11-06)
+- Initial version with progressive disclosure approach
+- Temporal awareness and git workflow management
+- Documentation templates and best practices
+- Conventional commit message support
+
+---
+
+## Frontend UI Developer
+
+### v2.0 (2025-11-18)
+- **Added**: Agent self-improvement with continuous learning via ChromaDB memory
+- **Added**: Phase 0.5: Retrieve Agent Memory (load UI patterns before implementation)
+- **Added**: Phase 3.5: Self-Evaluation & Memory Storage (learn from every component implementation)
+- **Added**: 3 agent memory collections:
+  - `agent_frontend_ui_developer_improvements` (learned UI design patterns)
+  - `agent_frontend_ui_developer_evaluations` (component development assessments)
+  - `agent_frontend_ui_developer_performance` (metrics tracking)
+- **Added**: Quality score calculation (0-100) based on component count, TypeScript coverage, design consistency, responsiveness, accessibility, performance
+- **Added**: Insight extraction with 5 categories: component_structure, styling_patterns, design_system, integration_patterns, performance_optimization
+- **Added**: Improvement usage statistics (usage_count, success_rate)
+- **Added**: Auto-deprecation for low-performing patterns (<40% success after 10 uses)
+- **Updated**: Quality Score to 72/100
+- **Updated**: Skills Integration: agent-memory-skills
+- Impact: Agent learns from experience, improves component development quality over time
+
+### v1.0 (Initial Release)
+- Frontend expert with 3 phases: Pattern Analysis, Component Development, Integration & QA
+- TypeScript-first development, Server Components by default
+- Tailwind CSS v4 and shadcn/ui integration
+
+---
+
+## Implementor
+
+### v2.0 (2025-11-18)
+- **Added**: Agent self-improvement with continuous learning via ChromaDB memory
+- **Added**: Phase 0.5: Retrieve Agent Memory (load improvements before task)
+- **Added**: Phase 4.5: Self-Evaluation & Memory Storage (learn from every implementation task)
+- **Added**: 3 agent memory collections:
+  - `agent_implementor_improvements` (learned patterns)
+  - `agent_implementor_evaluations` (task assessments)
+  - `agent_implementor_performance` (metrics tracking)
+- **Added**: Quality score calculation (0-100) based on code quality, test coverage, error handling, deadline adherence, pattern consistency
+- **Added**: Insight extraction with categories (implementation_patterns, error_handling, testing_strategies, code_quality, performance, deadline_management)
+- **Added**: Improvement usage statistics (usage_count, success_rate)
+- **Added**: Auto-deprecation for low-performing improvements (<40% success after 10 uses)
+- **Updated**: Quality Score to 72/100
+- **Updated**: Skills Integration: agent-memory-skills, document-writing-skills, testing-methodology-skills, error-handling-skills
+- Impact: Agent learns from implementation experience, improves code quality and deadline adherence over time
+
+### v1.0 (Initial Release)
+- Core implementation framework with 4-phase workflow
+- Pattern research and code quality standards
+- Temporal context management
+- Diagnostic verification
+
+---
+
+## Product Manager Agent
+
+### v1.1 (2025-11-08)
+- Professional product management with structured PRDs and roadmaps
+- 5 phases: Product Vision, User Research, Prioritization, Stakeholder Alignment, Requirements Handoff
+- RICE/MoSCoW/Kano prioritization frameworks
+- Comprehensive PRD template
+- Skills Integration: document-writing-skills
+- **Quality Score**: 63/70
 
 ---
 
