@@ -5,11 +5,17 @@ allowed-tools: [Task, Bash, Read, Write, Glob, Grep, WebSearch]
 model: claude-sonnet-4-5
 ---
 
-# Claude Code Workspace Initialization v3.0
+# Claude Code Workspace Initialization v3.1
 
 Initialize this project workspace with appropriate agents, skills, cognitive reasoning support, and directory structure.
 
-**What's New in v3.0** (2026-01-19):
+**What's New in v3.1** (2026-01-22):
+- Autonomous infrastructure hooks (skill recommendations, outcome logging)
+- Memory consolidation agent for cross-session learning
+- ChromaDB skill_memory integration
+- `$HOME` path convention for reliable expansion
+
+**v3.0** (2026-01-19):
 - Cognitive skills integration (9 reasoning patterns + IR-v2)
 - `.claude/decisions/` for strategic decision logs
 - `.claude/reasoning/` for multi-pattern reasoning sessions
@@ -101,6 +107,7 @@ ls ~/.claude/commands/ 2>/dev/null
 1. Domain match (project domain → specialized agents)
 2. Workflow match (needs debugging → root-cause-analyzer)
 3. Stage match (production → security-agent, qa-agent)
+4. Memory needs (long-running → memory-consolidation-agent)
 
 **Recommendation Format**:
 ```markdown
@@ -125,6 +132,7 @@ ls ~/.claude/commands/ 2>/dev/null
 | Research | breadth-of-thought, analogical-transfer |
 | Time-critical | rapid-triage-reasoning |
 | Stakeholder alignment | negotiated-decision-framework |
+| Long-running projects | memory-consolidation-agent (periodic) |
 
 ### 3.3 Commands Selection
 
@@ -261,7 +269,37 @@ EOF
 echo "READMEs created"
 ```
 
-### 5.4 Create/Update CLAUDE.md
+### 5.4 Install Autonomous Infrastructure (Optional - Comprehensive Mode)
+
+```bash
+echo "Setting up autonomous infrastructure..."
+
+# Check if hooks exist in global config
+if [ -f "$HOME/.claude/hooks/skill-recommender.sh" ]; then
+  echo "  Autonomous hooks available in ~/.claude/hooks/"
+  echo "  To enable, add to ~/.claude/settings.json:"
+  echo '  {
+    "hooks": {
+      "PreToolUse": [{"matcher": "Task", "hooks": [{"type": "command", "command": "$HOME/.claude/hooks/skill-recommender.sh"}]}],
+      "PostToolUse": [{"matcher": "Task|Skill", "hooks": [{"type": "command", "command": "$HOME/.claude/hooks/skill-outcome-logger.sh"}]}]
+    }
+  }'
+  echo ""
+  echo "  Or use /hooks command to configure interactively."
+else
+  echo "  Autonomous hooks not installed."
+  echo "  Install from: https://github.com/kimasplund/claude_cognitive_reasoning"
+  echo "  Run: ./scripts/install.sh and select autonomous-infrastructure"
+fi
+
+# Copy skill-triggers.yaml if not exists
+if [ -f "$HOME/.claude/skill-triggers.yaml" ] && [ ! -f ".claude/skill-triggers.yaml" ]; then
+  cp "$HOME/.claude/skill-triggers.yaml" ".claude/"
+  echo "  Copied skill-triggers.yaml to .claude/"
+fi
+```
+
+### 5.5 Create/Update CLAUDE.md
 
 ```bash
 if [ ! -f CLAUDE.md ]; then
@@ -371,10 +409,13 @@ Load from ~/.claude/skills/ via Skill tool:
 - All reference docs
 - Custom project commands
 - Full CLAUDE.md
+- Autonomous infrastructure hooks setup
+- ChromaDB skill_memory integration
 - Time: ~5 minutes
 
 ---
 
-**Version**: 3.0
-**Last Updated**: 2026-01-19
+**Version**: 3.1
+**Last Updated**: 2026-01-22
 **Cognitive Skills**: Integrated with reasoning framework v2.1
+**Autonomous Infrastructure**: Hooks for skill recommendations and outcome logging
