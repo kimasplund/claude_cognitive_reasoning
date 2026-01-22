@@ -18,6 +18,7 @@ A comprehensive cognitive architecture for AI agents, featuring 9 reasoning patt
 - **Handover Protocol** - State persistence across multi-pattern reasoning chains
 - **Self-Improving Architecture** - Agents learn and improve via ChromaDB memory
 - **Memory Consolidation** - "Sleep-like" periodic consolidation for cross-agent learning
+- **Autonomous Orchestration** - Auto-invoke skills/agents based on task patterns with hooks
 
 ---
 
@@ -153,6 +154,13 @@ claude_cognitive_reasoning/
 │
 ├── commands/                          # Claude Code commands
 │   └── init-workspace.md              # Initialize project workspace (v3.0)
+│
+├── autonomous-infrastructure/         # Self-improving orchestration system
+│   ├── README.md                      # Architecture & installation guide
+│   ├── skill-triggers.yaml            # Pattern → skill/agent mappings
+│   ├── skill-recommender.sh           # PreToolUse hook for suggestions
+│   ├── skill-outcome-logger.sh        # PostToolUse hook for logging
+│   └── sync-outcomes-to-chroma.py     # JSONL → ChromaDB sync
 │
 ├── research/                          # Research papers & analysis
 │   ├── llm_reasoning_psychology_research_2025-01.md

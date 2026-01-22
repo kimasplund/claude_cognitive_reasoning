@@ -1,0 +1,167 @@
+# Skill Auto-Invocation Triggers
+# Claude should check this file to determine which skills/agents to invoke automatically
+# based on task patterns and context.
+#
+# IMPORTANT: Only use these for COMPLEX tasks. Simple tasks should be done directly.
+# Threshold: If task needs < 5 tool calls, do it yourself.
+
+version: "1.0"
+
+# Complexity gates - only orchestrate when these are true
+complexity_requirements:
+  min_estimated_tool_calls: 5
+  multi_file_change: true
+  ambiguity_present: true
+  # Skip orchestration for:
+  skip_patterns:
+    - "quick|simple|just|only"
+    - "typo|spelling|rename"
+    - "one file|single file"
+
+# Task pattern → skill mappings
+triggers:
+  # Debugging & Investigation
+  - name: "debug-investigation"
+    patterns:
+      - "debug|bug|error|failing|broken|crash|exception"
+      - "why is.*not working"
+      - "investigate|diagnose"
+    skills:
+      - root-cause-analyzer
+      - debug:parallel
+    agents:
+      - root-cause-analyzer
+    auto_invoke: true
+    confidence_threshold: 0.7
+
+  - name: "break-testing"
+    patterns:
+      - "find bugs|find vulnerabilities|stress test|edge cases"
+      - "break this|test.*thoroughly"
+    skills:
+      - break-it-tester
+    auto_invoke: true
+
+  # Planning & Implementation
+  - name: "feature-implementation"
+    patterns:
+      - "implement|build|create|add feature"
+      - "develop|code up"
+    conditions:
+      - "multi_file_change_likely"
+    skills:
+      - plan:parallel
+      - confidence-check-skills
+    agents:
+      - implementor
+    auto_invoke: true
+
+  - name: "architecture-design"
+    patterns:
+      - "architect|design system|structure"
+      - "how should.*be organized"
+      - "trade-?offs|which approach"
+    skills:
+      - integrated-reasoning-v2
+    agents:
+      - architect-agent
+    auto_invoke: true
+
+  # Research & Exploration
+  - name: "codebase-exploration"
+    patterns:
+      - "where is|find.*code|locate|search for"
+      - "how does.*work|understand.*codebase"
+    agents:
+      - Explore
+      - code-finder
+    auto_invoke: true
+    prefer_parallel: true
+
+  - name: "research-task"
+    patterns:
+      - "research|investigate|explore options"
+      - "what are.*alternatives|compare"
+    skills:
+      - research:deep
+    agents:
+      - research-specialist
+    auto_invoke: true
+
+  # Documentation & Reporting
+  - name: "documentation"
+    patterns:
+      - "document|write docs|create readme"
+      - "explain.*code|add comments"
+    agents:
+      - codebase-documenter
+    auto_invoke: true
+
+  - name: "git-operations"
+    patterns:
+      - "commit|push|pull request|PR"
+      - "git.*ready|finalize changes"
+    skills:
+      - git
+      - review:pre-commit
+    auto_invoke: false  # Requires explicit user intent
+
+  # Security
+  - name: "security-review"
+    patterns:
+      - "security|vulnerab|threat|attack"
+      - "audit|pen-?test"
+    agents:
+      - security-agent
+    skills:
+      - security-analysis-skills
+    auto_invoke: true
+
+  # Complex reasoning
+  - name: "complex-decision"
+    patterns:
+      - "decide between|which.*should|trade-?off"
+      - "pros and cons|evaluate options"
+    skills:
+      - integrated-reasoning-v2
+      - dialectical-reasoning
+    auto_invoke: true
+
+  # Performance & Optimization
+  - name: "performance"
+    patterns:
+      - "optimi|performance|slow|fast|speed"
+      - "profil|benchmark"
+    skills:
+      - kf:profile:full
+    auto_invoke: false  # Can be expensive
+
+# Parallel execution hints
+parallel_patterns:
+  # These task types benefit from parallel agent execution
+  - pattern: "and|also|plus|as well as"
+    hint: "split_into_parallel_tasks"
+
+  - pattern: "multiple|several|all.*files"
+    hint: "parallel_file_processing"
+
+  - pattern: "compare|vs|versus|difference"
+    hint: "parallel_analysis"
+
+# Background task candidates
+background_candidates:
+  - name: "continuous-test-monitor"
+    trigger: "working on tests"
+    command: "/ralph-loop 'Monitor test results, report failures' --max-iterations 50"
+
+  - name: "lint-watcher"
+    trigger: "refactoring"
+    command: "Run linter in background, report issues"
+
+# Skill memory query
+memory_integration:
+  enabled: true
+  collection: "skill_memory"
+  query_before_tasks: true
+  store_outcomes: true
+  success_weight_boost: 1.2
