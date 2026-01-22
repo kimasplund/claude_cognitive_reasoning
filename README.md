@@ -303,9 +303,15 @@ allowed-tools: Read, Grep, Glob, WebSearch
 
 ## Requirements
 
+**Core:**
 - **Claude Code CLI** (latest version)
 - **Claude API access** (Opus or Sonnet models recommended)
 - **~50MB disk space** for full installation
+
+**For autonomous-infrastructure (optional):**
+- **jq** - JSON processor (`apt install jq` or `brew install jq`)
+- **Python 3.8+** - For sync scripts
+- **chromadb** - Python package (`pip install chromadb`)
 
 ---
 

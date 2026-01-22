@@ -93,6 +93,20 @@ complexity_requirements:
 | Architecture | `architect\|design\|trade-off` | integrated-reasoning-v2, architect-agent |
 | Security | `security\|vulnerab\|audit` | security-agent, break-it-tester |
 
+## Requirements
+
+- **jq** - JSON processor (used by hooks)
+- **Python 3.8+** - For ChromaDB sync script
+- **chromadb** - Python package for vector storage
+
+```bash
+# Install dependencies
+sudo apt install jq           # Debian/Ubuntu
+brew install jq               # macOS
+
+pip install chromadb
+```
+
 ## Installation
 
 1. Copy files to `~/.claude/`:
@@ -113,32 +127,47 @@ chmod +x ~/.claude/hooks/*.sh ~/.claude/hooks/*.py
     "PreToolUse": [
       {
         "matcher": "Task",
-        "hooks": [{"type": "command", "command": "~/.claude/hooks/skill-recommender.sh"}]
+        "hooks": [{"type": "command", "command": "$HOME/.claude/hooks/skill-recommender.sh"}]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "Task",
-        "hooks": [{"type": "command", "command": "~/.claude/hooks/skill-outcome-logger.sh"}]
+        "hooks": [{"type": "command", "command": "$HOME/.claude/hooks/skill-outcome-logger.sh"}]
       },
       {
         "matcher": "Skill",
-        "hooks": [{"type": "command", "command": "~/.claude/hooks/skill-outcome-logger.sh"}]
+        "hooks": [{"type": "command", "command": "$HOME/.claude/hooks/skill-outcome-logger.sh"}]
       }
     ]
   }
 }
 ```
 
+> **Note**: Use `$HOME` instead of `~` for reliable path expansion. You can also use `/hooks` command in Claude Code to manage hooks interactively.
+
 3. Create skill_memory collection in ChromaDB (done automatically on first sync)
 
-4. Add to your `CLAUDE.md`:
+4. Add to your `CLAUDE.md` (see `example-CLAUDE.md` for full template):
 
 ```markdown
 ## Autonomous Behavior
 
 Check ~/.claude/skill-triggers.yaml for auto-invocation patterns.
 Query skill_memory before complex tasks. Store outcomes after completion.
+```
+
+5. Verify installation:
+
+```bash
+# Check hooks are executable
+ls -la ~/.claude/hooks/
+
+# Test skill recommender (should output JSON if patterns match)
+echo '{"tool_input":{"prompt":"debug this error"}}' | ~/.claude/hooks/skill-recommender.sh
+
+# Verify jq is working
+echo '{}' | jq .
 ```
 
 ## Maintenance

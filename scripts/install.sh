@@ -22,7 +22,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${GREEN}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║  Claude Cognitive Reasoning Framework - Installer v2.1     ║${NC}"
+echo -e "${GREEN}║  Claude Cognitive Reasoning Framework - Installer v3.0     ║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -147,6 +147,32 @@ if [ -f "$REPO_DIR/CLAUDE.md" ]; then
         echo -e "${GREEN}  ✓ CLAUDE.md copied${NC}"
     else
         echo -e "${YELLOW}  - Skipped CLAUDE.md${NC}"
+    fi
+    echo ""
+fi
+
+# Install autonomous-infrastructure (optional)
+if [ -d "$REPO_DIR/autonomous-infrastructure" ]; then
+    echo -e "${YELLOW}Found autonomous-infrastructure (self-improving orchestration).${NC}"
+    echo "This adds hooks for auto-skill recommendations and outcome logging."
+    echo "Requires: jq, Python 3, chromadb package"
+    read -p "Install autonomous-infrastructure? (y/N) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        # Check dependencies
+        if ! command -v jq &> /dev/null; then
+            echo -e "${RED}  ✗ jq not found. Please install: sudo apt install jq${NC}"
+        else
+            mkdir -p "$CLAUDE_DIR/hooks"
+            cp "$REPO_DIR/autonomous-infrastructure/skill-triggers.yaml" "$CLAUDE_DIR/"
+            cp "$REPO_DIR/autonomous-infrastructure/"*.sh "$CLAUDE_DIR/hooks/"
+            cp "$REPO_DIR/autonomous-infrastructure/sync-outcomes-to-chroma.py" "$CLAUDE_DIR/hooks/"
+            chmod +x "$CLAUDE_DIR/hooks/"*.sh "$CLAUDE_DIR/hooks/"*.py
+            echo -e "${GREEN}  ✓ Hooks installed to ~/.claude/hooks/${NC}"
+            echo -e "${YELLOW}  ! Add hooks to ~/.claude/settings.json (see autonomous-infrastructure/README.md)${NC}"
+        fi
+    else
+        echo -e "${YELLOW}  - Skipped autonomous-infrastructure${NC}"
     fi
     echo ""
 fi
