@@ -1,5 +1,7 @@
 # Claude Cognitive Reasoning Framework
 
+> **Status: archived.** The reasoning skills in this repo are superseded by [thinkbetter-skills](https://github.com/kimasplund/thinkbetter-skills), which has the current, A/B-validated versions. This repo stays as a snapshot of the wider setup (agents, hooks, memory) as of January 2026.
+
 A comprehensive cognitive architecture for AI agents, featuring 9 reasoning patterns, a meta-orchestrator, and production-ready agent implementations. This framework moves beyond "prompt engineering" into "cognitive architecture" — ensuring agents don't use a hammer for a screw.
 
 **Author:** Kim Asplund
